@@ -4,16 +4,16 @@ layout: default
 ---
 
 ## About this project 
-This was a group project I completed as part of "Introduction to Data Science and Analytics" during my Master's degree. 
-The objective of the project was to design a data-driven strategy for improving Canada's innovation score. 
-I was responsible for the exploratory data analysis, clustering implementation, model development, and contributing to report writing.
+This was the final project for Applied Statistics II course, completed in the second term of my Master's degree. We were tasked with finding a dataset and implementing some of the supervised and unsupervised machine learning algorithms covered in the course. My group and I decided to challenge ourselves by picking a data from a field which we knew next to nothing about -- baseball. 
 
-I worked on this project with Alton Rego, Attaullah Azim, Samer Haidi, and Joanna Lo.
+My responsibilities were to implement spectral clustering on the batted ball location, and to predict player performance using principal component analysis and extreme gradient boosting. All group members contributed to the writing of the report. 
+
+I worked on this project with Navena Ciganovic and Joanna Lo.
 
 ## Skills
-Python, statistical analysis/machine learning (Principal Component Analysis, K-means clustering, constrained optimization), writing
+R, data visualization, statistical analysis/machine learning, writing
 
 ## Project Links
-- [Consulting Report](ConsultingReport.pdf)
-- [Model development Python notebook](Model_Development.ipynb)
-- [PCA/K-means Python notebook](MIE1624_Project_PCA_Clustering.ipynb)
+- [Final Report](Report.pdf)
+- [R code](MLB_Final.rmd)
+
