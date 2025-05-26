@@ -1,4 +1,6 @@
-## About this project 
+## Classifying Zooplankton
+
+### About this project 
 Over four months, I worked on this project as part of my "Data Science Methods, Collaboration, and Communication" course. 
 In this class, students work as consultants, collaborating with external scientists to fulfill some data science needs. 
 I collaborated with the Ontario Ministry of Natural Resources, developing a method to classify images of Zooplankton in Lake Huron. 
@@ -6,11 +8,11 @@ The [Final Report](Zooplankton_Final_Report.pdf) was the main deliverable for th
 
 This project was supervised by Dr. Vianey Leos Barajas and Dr. Sofia Ruiz Suarez. 
 
-## Skills
+### Skills
 Python/Scikit-learn (transfer learning, neural network development, ensemble model development), project management
 
 
-## Project links
+### Project links
 - [Project Code](FullPipeline_trimmed.ipynb)
 - [Project Overview](project-overview.md) (high-level)
 - [Final Report](Zooplankton_Final_Report.pdf) (in-depth, academic report)
