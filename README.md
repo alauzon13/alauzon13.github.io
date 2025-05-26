@@ -14,6 +14,7 @@ I'm a current graduate student in the [Department of Statistical Sciences](https
 
 
 ## HTML/CSS
+- [Web Application to Teach and Evaluate Multiverse Analysis](multiverse-analysis/summary.md), Summer 2023
 - [Wampum Belts as an Alternative Data Source](wampum/summary.md), Summer 2023/Summer 2025
 
 
