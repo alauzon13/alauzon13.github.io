@@ -4,6 +4,8 @@ I'm a current graduate student in the [Department of Statistical Sciences](https
 
 ## Python
 - [Data-driven Strategy for Improving Canada's Innovation Score](canada-innovation/summary.md)
+- [Classifying Zooplankton: A Collaborative Deep Learning Approach](zooplankton/summary.md)
+  
 
 
 
