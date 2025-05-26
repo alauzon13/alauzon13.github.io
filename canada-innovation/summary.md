@@ -12,6 +12,6 @@ I was responsible for the exploratory data analysis, clustering implementation, 
 Python, statistical analysis/machine learning (Principal Component Analysis, K-means clustering, constrained optimization), writing
 
 ## Project Links
-- [Consulting Report](https://alauzon13.github.io/canada-innovation/sticky-side/index.html)
+- [Consulting Report](https://alauzon13.github.io/canada-innovation/ConsultingReport.pdf)
 - [Model development Python notebook]()
 - [PCA/K-means Python notebook]()
