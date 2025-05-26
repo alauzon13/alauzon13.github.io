@@ -13,7 +13,6 @@ I'm a current graduate student in the [Department of Statistical Sciences](https
 ## HTML/CSS
 - [Wampum Belts as an Alternative Data Source](wampum/summary.md)
 
-## Writing
 
 
 
