@@ -1,0 +1,17 @@
+---
+title: Canada Innovation Overview
+layout: default
+---
+
+## About this project 
+This was a group project I completed as part of "Introduction to Data Science and Analytics" during my Master's degree. 
+The objective of the project was to design a data-driven strategy for improving Canada's innovation score. 
+I was responsible for the exploratory data analysis, clustering implementation, model development, and contributing to report writing.
+
+## Skills
+Python, statistical analysis/machine learning (Principal Component Analysis, K-means clustering, constrained optimization), writing
+
+## Project Links
+- [Consulting Report](https://alauzon13.github.io/canada-innovation/sticky-side/index.html)
+- [Model development Python notebook]()
+- [PCA/K-means Python notebook]()
