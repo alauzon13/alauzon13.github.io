@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Wampum Belts: Data Preservation through Oral Histories</title>
+  <meta name="description" content="Scrollama: Sticky Side Example" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    #scrolly {
+        display: flex;
+        flex-direction: row; /* Arrange text and image side by side */
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+        margin-top: 2rem;
+        }
+
+    #scrolly>* {
+      flex: 1;
+    }
+
+
+    figure {
+      width: 30%; /* Reduce the width of the image block */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1; /* Take up the left side */
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      margin: 0;
+      padding: 0; /* Remove any default padding */
+      background-color: #8a8a8a;
+      z-index: 0;
+    }
+
+    article {
+      flex: 1; /* Take up the right side */
+      position: relative;
+      width: 70%; /* Increase the width of the text block */
+      margin: 0 auto; /* Center the text container */
+      padding: 2rem;
+    }
+    header {
+      text-align: center;
+      padding: 4rem 1rem 2rem;
+      background: #fff;
+      position: relative;
+      z-index: 2;
+      font-style: italic; /* Italicize the header text */
+
+    }
+
+  
+
+    figure p {
+      text-align: center;
+      padding: 1rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 8rem;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    figure.jpg {
+      margin: 0; /* Remove default margins */
+      padding: 0; /* Remove default padding */
+      width: 100%; /* Ensure the figure fits within the container */
+      max-width: 800px; /* Optional: Set a maximum width */
+      display: block; /* Ensure normal figure behavior */
+      background-color: transparent; /* No background for the figure */
+      position: relative; /* Ensure normal flow positioning */
+
+    }
+
+    figure.jpg img {
+      width: 100%; /* Ensure the image fits within the figure */
+      height: auto; /* Maintain aspect ratio */
+    }
+
+    figure.jpg figcaption {
+      font-size: 0.9rem; /* Make the caption smaller */
+      font-style: italic; /* Italicize the caption */
+      text-align: left; /* Center the caption text */
+      color: #666; /* Optional: Use a lighter color for the caption */
+      margin-top: 0.5rem; /* Add some spacing above the caption */
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column; /* Ensure content stacks vertically */
+      justify-content: center; /* Center content vertically */
+      align-items: left; /* Center content horizontally (optional) */
+      height: auto; /* Make each step take up the full viewport height */
+      margin: 0; /* Reduce vertical spacing between steps */
+      padding: 2rem; /* Add padding for spacing */
+      font-size: 1.2rem; /* Adjust font size for readability */
+      line-height: 1.6; /* Adjust line height for readability */
+      background: rgba(255, 255, 255, 0.9); /* Optional: Add a background for readability */
+      border-left: 4px solid #ccc; /* Optional: Add a visual indicator */
+      overflow: visible; /* Prevent content from overflowing */
+      text-align: left;
+
+    }
+
+    .step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step.is-active {
+      border-left: 4px solid #333; /* Highlight the active step */
+      background: rgba(255, 255, 255, 1); /* Make the active step more prominent */
+    }
+
+    .step b {
+      display: inline !important; /* Ensure bold text behaves as inline */
+      margin: 0 !important; /* Remove any unintended margins */
+      padding: 0 !important; /* Remove any unintended padding */
+      text-align: left; /* Ensure text is aligned to the left */
+      font-weight: bold; /* Ensure bold styling */
+    }
+
+
+
+    .step a {
+        color: #0073e6; /* Give links a blue color */
+        text-decoration: none; /* Remove underline */
+        text-align: left; /* Ensure text is not centered */
+        display: inline; /* Ensure bold and hyperlink text behaves as inline */
+
+
+
+    }
+
+    .step h2 {
+    margin: 1rem 0; /* Add spacing above and below the title */
+    padding: 0;
+    font-size: 2rem; /* Adjust font size */
+    font-weight: bold; /* Ensure the title is bold */
+    text-align: left; /* Center the title */
+    line-height: 1.4; /* Adjust line height for readability */
+    color: #333; /* Set a dark text color */
+  }
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1 class="page-title">Wampum Belts: Data Preservation through Oral Histories</h1>
+    <p>By Adele Lauzon</p>
+  </header>
+
+  <main>
+    <section id="scrolly">
+    <figure>
+        <svg id="wampum-belt" width="100%" height="100%"></svg>
+        </figure>
+      <article>
+        <div class="step" data-step="1">
+       
+          <p>After centuries of exploitation, misrepresentation, and exclusion from stewardship, Indigenous Peoples from across North America are working to reclaim their data.</p>
+              
+          <p>Data has long been weaponized against Indigenous peoples. Early census data was used to justify forceful assimilation policies, like the Indian Act in Canada; the lack of race- or ethnicity-disaggregated law enforcement data has allowed for the crisis of <a href="https://www.cbc.ca/radio/unreserved/why-indigenous-people-are-fighting-for-data-sovereignty-1.7158508">Missing and Murdered Indigenous Women</a> to become invisible; regular destruction of 
+          <a href="https://windspeaker.com/news/windspeaker-news/indigenous-data-sovereignty-concerns-raised-harm-residential-schools">residential school records</a>has obscured information about how many children died in this system.</p>  
+              
+          <p>Just to name a few.</p>
+              
+          <p>Now, it's time for Indigenous Peoples to be in charge of their own data.</p>
+              
+   
+              </div>
+        <div class="step" data-step="2">
+              <h2>Indigenous Data Sovereignty</h2>
+
+              The path to <b>Indigenous Data Sovereignty</b> involves First Nations, Inuit, and
+              Métis peoples owning and controlling data that is created with or about them. It's about Indigenous Peoples moving from subjects to researchers. 
+            It's about accepting Indigenous data, in its various forms, as equally valid as Western knowledge. 
+              </div>
+            
+        <div class="step" data-step="3"> <p>Prioritizing Indigenous Data Sovereignty is crucial when Western and Indigenous knowledge systems 
+            have opposing records of the same events, as is often the case when it comes to treaties.</p> 
+            
+           <p> While many treaty disputes have centered on Indigenous records stored through oral tradition (the <a href="https://www.thecanadianencyclopedia.ca/en/article/sylliboy-case">Syliboy case</a>, 1928; the <a href = "https://www.thecanadianencyclopedia.ca/en/article/marshall-case">Marshall Case</a>, 1993), 
+            the Haudenosaunee Wampum Belts are a unique example of how oral history and Indigenous artistry intersect as a means of recordkeeping. 
+            Despite Western rejection of the Wampum Belts as a valid record of a treaty made between the Haudenosaunee and the Dutch in 1613, the dynamic, relational, 
+            resilient nature of this data system is an important example of Indigenous Data Sovereignty in practice.</div>
+        <div class="step" data-step="4">
+              <h2>Indigenous and Western Knowledge Systems</h2>
+              In the Western worldview, knowledge is gained through observation and experimentation. 
+              Western knowledge is produced in specific, controlled environments, yet also
+              hinges upon generalizability to other contexts. Western ways of knowing also reinforce the idea
+              that knowledge obtained outside this experimental framework is less valid.</div>
+        <div class="step" data-step="5"> 
+          <p>On the other hand, Indigenous Knowledge is informed by <a href="https://bcmj.org/articles/two-eyed-seeing-current-approaches-and-discussion-medical-applications">land and the environment.</a> Indigenous approaches to research are varied, but often include a relational element -- accounting for experiences
+              and spirituality. Indigenous data exists in diverse forms, including regalia, songs, art, ceremonies, and oral traditions. A critical part of Indigenous Data
+              Sovereignty is recognizing and respecting data that exists outside of Western definitions and parameters.</p> 
+              
+              <p>While frameworks like  <a href="https://bcmj.org/articles/two-eyed-seeing-current-approaches-and-discussion-medical-applications">Two Eyed Seeing</a> work to 
+              hold these worldviews in tandem, there are still instances where Indigenous and Western knowledge systems maintain different records of the same events.</p>  
+             </div>
+        <div class="step" data-step="6">
+                <h2>The Two-Row Wampum</h2>
+                <b>Wampum belts</b> are intricate beaded artworks made out of shells, and are thought of as a
+              living record of the Haudenosaunee nation (present-day New York State and Ontario). Wampum can symbolize many types of events — 
+              including the granting of titles, technological innovations, treaties, and more. The belts are
+              often used as a guide to share oral traditions or as part of public demonstrations.</div>
+        <div class="step" data-step="7">
+                <figure class = "jpg">
+                  <img src="../two-row-wampum.jpg" alt="two-row-wampum" style="width:120%; height:auto;">
+                  <figcaption> <a href = https://www.onondaganation.org/culture/wampum/two-row-wampum-belt-guswenta/"> The Two Row Wampum</a></figcaption>
+              </figure>
+                
+              <p>One of the most famous Wampum Belts is the Two Row Wampum, or Kaswentha (Gaswéñdah), representing a treaty of "respectful coexistence" between the Haudenosaunee and the Dutch in 1613. 
+                  When Dutch settlers first arrived on Haudenosaunee land and suggested that Indigenous Peoples refer to them as “father,” the
+                Haudenosaunee proposed “brother” instead. This autonomy and sovereignty is reflected in the design of the belt,
+                made from purple quahog shells and white whelk snail shells, displaying two horizontal lines.</p> 
+                
+                <p>One purple line represents the Haudeonsaunee canoe, and the other the
+                  Dutch tall ship. Between the purple lines is a row of white shells representing the River of Life,
+                  upon which the canoe and tall ship are both travelling, neither steering nor crossing the other. </p></div>
+        <div class="step" data-step="8">At the time of the treaty’s inception, the Haudenosaunee did not use paper to record their
+              history. Because there is no original paper-based documentation of the treaty, some Western scholars question 
+              its legitimacy. Wampum Belts and their accompanying oral histories exist outside the Western constraints of what data can be, and as a
+              result are often dismissed entirely.</div>
+        <div class="step" data-step="9">
+                <h2>The Resilience of Alternative Data Storage</h2>
+                Wampum Belts form a resilient data system unlike any Western method. After Chief
+              Deskaheh toured Europe to garner global support for Haudenosaunee sovereignty in 1923, the
+              Canadian government ordered the RCMP to dismantle the Confederacy and <b> destroy </b> the Wampum Belts. </div>
+        <div class="step" data-step="10">However, Wampum Belts and their
+              accompanying oral histories are a <b> living, dynamic database </b> -- meaning that destruction did not
+              result in missing data. With the guidance of Indigenous Knowledge Holders, the belts were
+              remade and the database persists. Wampum Belts do not store data in a server or a spreadsheet,
+              but instead store information in the community.</div>
+        <div class="step" data-step="11">The relational nature of the Wampum system epitomises the Indigenous
+              worldview of knowledge creation and sharing. Given how destructive colonial forces were and are,
+              we must consider that the Indigenous worldview and data methods like the Wampum Belt may
+              be more resilient than the Western counterparts. </div>
+        <div class="step" data-step="12"> Scientific research has expanded to accept not just spreadsheets and tables as data, but images, videos, 
+            novels, audio, and much more as valid sources of information. The Wampum system is an invitation to expand our
+            understanding of data even further, and to challenge Western beliefs around what "good" data looks like.  </div>
+   
+      </article>
+
+
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/d3@5.9.1/dist/d3.min.js"></script>
+  <script src="../scrollama.min.js"></script>
+  <script src="../script.js"></script>
+  <script>
+    var main = d3.select("main");
+    var scrolly = main.select("#scrolly");
+    var figure = scrolly.select("figure");
+    var article = scrolly.select("article");
+    var step = article.selectAll(".step");
+
+    var scroller = scrollama();
+
+    function handleResize() {
+      var stepH = Math.floor(window.innerHeight * 0.75);
+      step.style("height", stepH + "px");
+
+      var figureHeight = window.innerHeight / 2;
+      var figureMarginTop = (window.innerHeight - figureHeight) / 2;
+
+      figure
+        .style("height", figureHeight + "px")
+        .style("top", figureMarginTop + "px");
+
+      scroller.resize();
+    }
+
+    function handleStepEnter(response) {
+      step.classed("is-active", function (d, i) {
+        return i === response.index;
+      });
+
+      figure.select("p").text(response.index + 1);
+    }
+
+    function init() {
+      handleResize();
+      scroller
+        .setup({
+          step: "#scrolly article .step",
+          offset: 0.33,
+          debug: false
+        })
+        .onStepEnter(handleStepEnter);
+    }
+
+    init();
+  </script>
+</body>
+
+</html>
