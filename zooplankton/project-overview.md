@@ -17,6 +17,18 @@ The lakes are also immensely important to First Nations in the region, who have 
 
 In the Great Lakes system, zooplankton are the foundation of the food web, with all fish feeding only on zooplankton at some point during their life cycles (US EPA, 2016). Given the sequential nature of the food chain, understanding downstream effects on larger organisms (like whitefish) begins with evaluating the basal organisms. In freshwater ecosystems, this involves understanding the variety and density of zooplankton populations. Given the economic importance of the Great Lakes ecosystem and the responsibility to protect whitefish, the provincial government requires updated tools to automatically classify and enumerate zooplankton organisms. 
 
+## The Data
+
+The Ministry provided three sources of data for this project, two plain-text datasets and a folder of images. The Master Table forms the base of this system, as each row represents a different water sample and the environmental information that is common to every particle in that sample. The Master Table also provides the filepathsfor the sample's mosaic, which is a grid of images of individual particles, as well as the table of geometric information for each particle in the sample. Due to computational constraints, 100 rows (100 water samples) from Lake Huron were randomly sampled from the Master table, and associated Mosaics and geometric data was obtained. This reduced dataset was used for model development. 
+
+This random sample was then condensed into two datasets, one plain-text table and a folder of images. The plain-text dataset was merged such that each row represents a particle, the geometric data associated with that particle, and the environmental data associated with that particle's water sample. The Mosaics were split into individual vignettes (particle images), and a table was created to store the filepath, particle ID, and class of each vignette. 
+
+
+
+
+
+![dataSetup](assets/data_prep.png)
+
 
 
 
