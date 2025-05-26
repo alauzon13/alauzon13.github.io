@@ -1,0 +1,574 @@
+---
+title: "AppliedFinalNeat"
+output: pdf_document
+date: "2025-03-31"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Install packages
+
+packages <- c(
+  "tidyverse",
+  "ggplot2",
+  "corrplot",
+  "ggcorrplot",
+  "caret",
+  "data.table",
+  "mltools",
+  "xgboost",
+  "reshape2",
+  "viridis",
+  "ggfortify",
+  "factoextra",
+  "cluster",
+  "plotly",
+  "ggdendro",
+  "sportyR",
+  "gridExtra"
+)
+
+# Only install if not already installed
+new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+if(length(new_packages)) install.packages(new_packages)
+
+# Load from library
+library(tidyverse)
+library(ggplot2)
+library(corrplot)
+library(ggcorrplot)
+library(caret)
+library(data.table)
+library(mltools)
+library(xgboost)
+library(reshape2)
+library(viridis)
+library(ggfortify)
+library(factoextra)
+library(cluster)
+library(plotly)
+library(ggdendro)
+library(sportyR)
+library(gridExtra)
+
+# Helper Functions
+
+
+## Barplot
+barplot = function(values){
+  n = length(values)
+  df = data.frame(value = values,  index = 1:n)
+  ggplot(df, aes(index, value, fill = value)) + 
+    geom_bar(color = "black", stat = "identity")+
+    scale_fill_gradient2(low="#619CFF", mid="white", high="#F8766D")+
+    theme_bw()
+}
+
+## Scatterplot
+scatterplot = function(X, cluster = NULL){
+  if(is.null(cluster)) cluster = rep(1, nrow(X))
+  if(length(unique(cluster)) == 1){
+    ggplot()+
+      geom_point(X, mapping = aes(hc_x, hc_y)) +
+       scale_y_reverse()
+  } else {
+    ggplot()+
+      geom_point(data.frame(X, cluster = as.factor(cluster)), alpha=0.5, 
+                 mapping = aes(hc_x, hc_y, color = cluster, shape=type_of_hit))+
+       scale_y_reverse() +
+  labs(title = "Hit Coordinates of Batted Balls",
+       x = "X",
+       y = "Y", 
+       caption = "Figure _")
+
+  } 
+}
+
+## Heatmap
+heatmap = function(A){
+  n = nrow(A)
+  p = ncol(A)  
+  df = data.frame(value = c(A),  i = 1:n, j = rep(1:p, rep(n, p)))
+  ggplot(df, aes(j, i, fill = value)) + 
+    geom_tile()+
+    scale_fill_viridis()+
+    scale_y_reverse()+
+    theme_void()
+}
+```
+
+```{r}
+# Set seed for reproducibility
+set.seed(1013)
+
+# Load in data
+data <- read_csv("Statcast_2019.csv")
+# Remove deprecated and irrelevant columns
+data_cleaned <- data %>% select(-contains("deprecated"), -spin_dir, -umpire, 
+                                -game_date, -game_type) %>% 
+  mutate(team_at_bat = ifelse(inning_topbot == "Top", "away", "home")) %>% 
+  drop_na(release_speed)
+
+```
+
+
+## Q2: Clustering hit ball locations
+
+Suppose we want to cluster the x,y coordinates of where hit balls land (or are caught) in the field. 
+
+```{r}
+# Create type_of_hit column
+data_cleaned <- data_cleaned %>% 
+  mutate(type_of_hit= case_when(
+    events == "sac_fly_double_play" | events == "sac_fly" ~ "sac_fly", 
+    events == "sac_bunt_double_play" | events == "sac_bunt" ~ "sac_bunt", 
+    events == "home_run" ~ "home_run", 
+    events == "single" ~ "single",
+    events == "double" ~ "double", 
+    events == "triple" ~ "triple", 
+
+  )) %>% 
+  mutate(location_x = 2.5 * (hc_x - 125.42),
+         location_y = 2.5 * (198.27 - hc_y))
+
+# Save smaller, reduced df 
+only_hits <- data_cleaned %>% select(hc_x, hc_y, type_of_hit) %>% drop_na()
+
+# Plot the field
+ggplot()+
+  geom_point(only_hits, alpha=0.1, mapping = aes(hc_x, hc_y, 
+                                                 colour = type_of_hit)) + 
+    scale_y_reverse() + 
+  labs(title = "Hit Coordinates of Batted Balls",
+       x = "X",
+       y = "Y") +
+  guides(colour = guide_legend(title = "Type of Hit", 
+                               override.aes = list(alpha = 1))) 
+
+```
+
+We can see that different types of hit balls are concentrated in different parts of the field. For example, sacrificial bunts (`sac_bunt`) are mostly located near the home plate at the bottom vertex of the diamond. 
+
+Can a clustering algorithm recover these patterns? If we simply were to cluster this data, would we be able to neatly classify different types of hit balls? 
+
+Given the noisy, overlapping, non-linear structure of this data, we elected to employ spectral clustering to see if these patterns can be recovered. 
+
+### Spectral Clustering 
+
+```{r}
+set.seed(123)
+# Original data was too large -- taking random subsample 
+only_hits_reduced <- sample_n(only_hits, size=5000)
+
+ggplot()+
+  geom_point(only_hits_reduced, alpha=0.2, mapping = aes(hc_x, hc_y, 
+                                                         colour = type_of_hit)) + 
+  scale_y_reverse() + 
+  labs(title = "Hit Coordinates of Batted Balls",
+       x = "X",
+       y = "Y", 
+       caption = "Figure _") +
+  guides(colour = guide_legend(title = "Type of Hit", 
+                               override.aes = list(alpha = 1))) + theme_bw()
+```
+
+
+```{r}
+# Create matrix of location data
+loc_data <- only_hits_reduced %>% select(hc_x, hc_y)
+loc_matrix <- as.matrix(loc_data)
+loc_matrix <- scale(loc_matrix, scale = T, center = T)
+```
+
+
+```{r}
+set.seed(123)
+# Perform spectral clustering
+
+# KNN function 
+knn = function(values, k){
+  index = order(values, decreasing = TRUE)[(1:k) + 1]
+  values[-index] = NA
+  return(values)
+}
+
+
+# Similarity matrix S
+S = exp(-1/2 * as.matrix(dist(loc_matrix)))
+
+# Weighted adjacency matrix W, k=20
+W = apply(S, 2, function(x) knn(x, k = 5))
+W = (W + t(W)) / 2
+W[is.na(W)] = 0
+
+# Compute Laplacian L
+D = diag(colSums(W))
+L = D - W
+
+# Find eigen decomposition of L
+n = nrow(L)
+ED = eigen(L)
+```
+
+```{r}
+set.seed(123)
+# Try different number of clusters 
+plot_list <- list()  # Initialize an empty list to store the plots
+
+# Try different number of clusters 
+for (K in 1:6) {
+  # Find last K eigen vectors of L 
+  U <- ED$vectors[, (n-K+1):n]
+  
+  # Run k-means on last K eigen vectors of L 
+  KM <- kmeans(U, centers = K, iter.max = 100, nstart = 10)
+  
+  # Generate and store the scatterplot
+  plot_list[[K]] <- scatterplot(only_hits_reduced, KM$cluster) +
+    ggtitle(paste("K =", K))  # Optional: add title to each plot
+}
+
+# Display plots in a grid (e.g., 2 rows, 3 columns)
+grid.arrange(grobs = plot_list, nrow = 2, ncol = 3)
+```
+
+```{r, fig.width=8, fig.height=6}
+# Inspect K=6
+
+set.seed(123)
+K = 6
+U = ED$vectors[, (n-K+1):n]
+# Run k-means on last K eigen vectors of L 
+KM = kmeans(U, centers = K, iter.max = 100, nstart = 10)
+# Print output 
+
+plt <- ggplot()+
+      geom_point(data.frame(only_hits_reduced, cluster = as.factor(KM$cluster)), 
+                 alpha=0.5, mapping = aes(hc_x, hc_y, color = cluster, shape=type_of_hit))+
+       scale_y_reverse()+ 
+  labs(title = "Hit Coordinates of Batted Balls",
+       x = "X",
+       y = "Y", 
+       caption = "Figure _") +
+  guides(colour = guide_legend(override.aes = list(alpha = 1))) + theme_bw()
+
+plt
+
+```
+
+
+
+
+## Q3: What are the key factors contributing to player performance in different game situations?
+
+
+To understand how different game conditions affect a player’s performance, we propose implementing PCA to see if specific features (e.g. the type of game, whether it is at home or away) impact bat outcomes like estimated batting average or foul ball percentage. Again, understanding how different game conditions impact player performance may impact training plans ahead of certain types of games. 
+
+
+```{r}
+# Clean data
+data_q3 <- data_cleaned %>% select(-player_name, -batter, -pitcher, -des, -sv_id, 
+                                   -game_pk, -contains("fielder"),-game_year, 
+                                   -on_1b, -on_2b, -on_3b, -pitcher.1, 
+                                   -inning_topbot, -...1)
+
+
+```
+
+Impute missing data:
+
+- Events: event of resulting plate appearance. If there is no event, there was either a ball, or non-terminal foul or strike (not the third). So, can impute "none" for missing variables here. 
+- Hit Location: if no hit location, the ball never made it to the field - also could be a hit or strike. Can impute "none" for these vars too. 
+- bb-type: the type of batted ball. again, if the player strikes out, there won't be a type. can input none
+- hc_x, hx_y: x,y coordinates of hit ball. Again, if ball isn't hit, we can input 0
+- hit_distance, launch_speed, launch_angle: characteristics of hit balls. If not hit, can input none
+- estimated_ba, estimated_woba, woba_value, woba_denom, babip_value, iso_value, launch_speed angle: can all replace with None 
+
+```{r}
+total_cols = ncol(data_q3)
+# Find character columns
+character_cols = colnames(data_q3[, sapply(data_q3, class) == 'character'])
+# Find numeric columns
+numeric_cols = colnames(data_q3[, sapply(data_q3, class) == 'numeric'])
+
+# For numeric columns, impute "None" for missing
+data_q3_imputed <- data_q3 %>% 
+  mutate_at(character_cols, ~replace_na(., "None")) %>% 
+  mutate_at(numeric_cols, ~replace_na(., 0))
+```
+
+```{r}
+#Reduce dataset variables representing game conditions:
+# Eg: variables that are established before the batter hits 
+data_q3_reduced <- data_q3_imputed %>% select(pitch_type, 
+                                              release_speed, 
+                                              release_pos_x, 
+                                              release_pos_y,
+                                              release_pos_z,
+                                              zone, 
+                                              stand, 
+                                              p_throws, 
+                                              balls, 
+                                              strikes, 
+                                              pfx_x, 
+                                              pfx_z, 
+                                              plate_x, 
+                                              plate_z, 
+                                              outs_when_up, 
+                                              inning, 
+                                              vx0, 
+                                              vy0, 
+                                              vz0, 
+                                              ax, 
+                                              ay, 
+                                              az, 
+                                              sz_top, 
+                                              sz_bot, 
+                                              effective_speed, 
+                                              release_spin_rate, 
+                                              release_extension, 
+                                              release_pos_y, 
+                                              launch_speed_angle, 
+                                              at_bat_number, 
+                                              pitch_number, 
+                                              pitch_name, 
+                                              home_score, 
+                                              away_score, 
+                                              bat_score, 
+                                              fld_score, 
+                                              if_fielding_alignment, 
+                                              of_fielding_alignment,
+                                              spin_axis, 
+                                              team_at_bat, 
+                                              woba_value)
+
+X <- data_q3_reduced %>% select(-woba_value)
+y <- data_q3_reduced %>% select(woba_value)
+
+```
+
+```{r}
+# Find character columns
+character_cols = colnames(X[, sapply(X, class) == 'character'])
+numeric_cols = colnames(X[, sapply(X, class) == 'numeric'])
+
+# # Scale numeric cols
+X_numeric <- X[numeric_cols]
+X_normalized <- scale(X_numeric)
+y_normalized <- scale(y)
+
+
+# One-hot encode categorical cols
+X_char <- X[character_cols] 
+X_char <- lapply(X_char , factor)
+X_char <- as.data.table(X_char)
+X_onehot <- one_hot(X_char)
+
+# bind back together
+X_full <- cbind(as.data.frame(X_numeric), as.data.frame(X_onehot))
+```
+
+
+```{r}
+# Calculate the correlation matrix
+cor_matrix <- cor(X_numeric)
+# Create a basic correlation heatmap using corrplot
+corrplot(cor_matrix, diag = FALSE, method = "color", type="upper", tl.cex=0.5,
+        mar=c(1,1,2.5,1))
+title(main="Correlation Heatmap of Numeric Variables", sub="Figure _")
+
+```
+
+
+
+
+
+### Run PCA
+
+```{r}
+# Run PCA and find scree plot 
+
+PCA = prcomp(X_full, center = TRUE, scale.=FALSE)
+summ = summary(PCA)
+data.frame(summ$importance)
+ve = summ$importance[2,]
+barplot(ve)+
+  labs(title="Scree Plot of PCA", caption="Figure _") +
+  xlab("Principal Component")+
+  ylab("Variance Explained")+
+  ylim(0, 1)
+```
+
+
+
+
+
+```{r}
+sum(ve[1:2])
+
+# First 2 PCs explain 99.5% of the data
+```
+
+
+
+### Build model 
+
+```{r}
+set.seed(1013)
+q3_pcs <- PCA$x[,1:2]
+q3_pcs <- as.data.frame(cbind(q3_pcs, y_normalized))
+
+
+trainIndex <- createDataPartition(q3_pcs$woba_value, p = 0.8, list = FALSE)
+train_data <- q3_pcs[trainIndex, ]
+test_data <- q3_pcs[-trainIndex, ]
+
+# Convert data to matrix format (XGBoost requires matrices)
+train_matrix <- as.matrix(train_data[, 1:2])
+test_matrix <- as.matrix(test_data[, 1:2])
+train_label <- train_data$woba_value
+test_label <- test_data$woba_value
+
+```
+
+```{r}
+
+# Convert data to XGBoost matrix format
+dtrain <- xgb.DMatrix(
+  data = as.matrix(train_data[, -which(names(train_data) == "woba_value")]), 
+                      label = train_data$woba_value)
+
+
+
+
+# Define XGBoost parameters
+params <- list(
+  objective = "reg:squarederror",  # Regression task
+  eta = 0.1,                       # Learning rate
+  max_depth = 6,                   # Tree depth
+  subsample = 0.5                 # Row sampling
+
+)
+
+# Perform 5-fold cross-validation
+cv_results <- xgb.cv(
+  params = params,
+  data = dtrain,
+  nrounds = 100,        # Number of boosting rounds
+  nfold = 5,            # 5-fold CV
+  metrics = "rmse",     # Evaluate using RMSE
+  early_stopping_rounds = 10,  # Stop early if no improvement
+  verbose = FALSE
+)
+
+# Print best iteration based on CV results
+best_nrounds <- cv_results$best_iteration
+cat("Best nrounds:", best_nrounds, "\n")
+
+# Train final model with best nrounds
+xgb_model <- xgboost(
+  params = params,
+  data = dtrain,
+  nrounds = best_nrounds,  # Use best number of rounds
+  verbose = FALSE
+)
+
+
+```
+```{r}
+test_pred <- predict(xgb_model, test_matrix)
+
+test_data <- tibble(pred = test_pred, actual = test_label)
+# Plot predictions vs actual bike rental count
+ggplot(test_data, aes(x = pred, y = actual)) + 
+  geom_point() + 
+  geom_abline()
+
+# Calculate RMSE
+test_data %>%
+  mutate(residuals = actual - pred) %>%
+  summarize(rmse = sqrt(mean(residuals^2)))
+```
+
+```{r}
+# Find range of the outcomes to see if RMSE is decent 
+range(test_label)
+```
+
+
+
+```{r}
+# Get feature importance from XGBoost model
+importance_matrix <- xgb.importance(model = xgb_model)
+print(importance_matrix)
+
+# Plot feature importance
+xgb.plot.importance(importance_matrix)
+```
+
+```{r}
+# Get PCA loadings
+loadings <- PCA$rotation[, 1:2]  # Loadings for first 2 PCs
+
+# Find top contributing original variables for the most important PCs
+top_pcs <- importance_matrix$Feature[1:2]  # Top 5 PCs from XGBoost
+for (pc in top_pcs) {
+  cat("\nTop contributing variables for", pc, ":\n")
+  print(sort(abs(loadings[, pc]), decreasing = TRUE)[1:5])  
+}
+```
+
+```{r}
+
+# Create a list to store the top contributing variables for each PC
+top_pcs <- importance_matrix$Feature[1:2]  # Top 2 PCs from XGBoost
+bubble_data <- list()
+
+for (pc in top_pcs) {
+  top_contrib <- sort(abs(loadings[, pc]), decreasing = TRUE)[1:5]  
+  top_contrib_df <- data.frame(
+    Variable = names(top_contrib),
+    Contribution = top_contrib,
+    PC = rep(pc, length(top_contrib)),
+    Size = abs(top_contrib) * 10
+  )
+  bubble_data[[pc]] <- top_contrib_df
+}
+
+# Combine all data frames into one
+bubble_data_all <- do.call(rbind, bubble_data)
+bubble_data_all <- bubble_data_all  %>% 
+  mutate(vartext = case_when(
+    Variable == "spin_axis" ~ "Pitch Spin Axis", 
+    Variable == "ax" ~ "Pitch Acceleration, X",
+    Variable == "ay" ~ "Pitch Acceleration, Y",
+    Variable == "az" ~ "Pitch Acceleration, Z",
+    Variable == "vy0" ~ "Pitch Velocity, Y",
+    Variable == "effective_speed" ~ "Pitch Speed from Extension",
+    Variable == "release_spin_rate" ~ "Pitch Spin Rate"
+    
+  ))
+
+# Create a bubble plot
+ggplot(bubble_data_all, aes(x = reorder(vartext, Contribution), 
+                            y = PC, size = Size, color = PC)) +
+  geom_point(alpha = 0.6) +  
+  scale_size_continuous(range = c(3, 10)) +  #
+  labs(title = "Bubble Plot of Top Contributing Variables for PCs", 
+       x = "Variable", y = "Principal Component", size = "Contribution", 
+       color = "PC", 
+       caption = "Figure _") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+
+
+
+
+
+
