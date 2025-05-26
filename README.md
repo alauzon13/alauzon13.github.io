@@ -8,6 +8,7 @@ I'm a current graduate student in the [Department of Statistical Sciences](https
 
 
 ## R
+- [Uncovering Patterns in MLB Statcast Data, 2019](mlb)
 
 
 ## HTML/CSS
