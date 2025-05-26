@@ -5,6 +5,8 @@ I'm a current graduate student in the [Department of Statistical Sciences](https
 ## Python
 - [Data-driven Strategy for Improving Canada's Innovation Score](canada-innovation/summary.md), Fall 2024
 - [Classifying Zooplankton: A Collaborative Deep Learning Approach](zooplankton/summary.md), Winter 2025
+- [Dupe Detection: Can a machine learning model spot the fake?](fake-detection/summary.md), Summer 2025
+- [Census-Independent Population Estimation in the Yukon](population-estimation/summary.md), Master's Thesis
   
 
 
