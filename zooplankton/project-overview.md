@@ -1,3 +1,22 @@
+## The Great Lakes Ecosystem
+The Great Lakes and their surrounding ecosystem is the third largest regional economy in the world (Ontario Environment and Energy). In Ontario, the lakes are hugely important to the provincial economic landscape, contributing to 91% of the provincial GDP. 
+
+![ontarioGDP](assets/zooplankton_pie.png)
+*Great Lakes contributions to Ontario GDP*
+
+
+The lakes are also immensely important to First Nations in the region, who have stewarded the land and water for generations. For the Saugeen Ojibway Nation, **lake whitefish** hold particular significance, playing a part in the creation story for all Anishinaabe and being an important food source for the community since time immemorial (Bardwell, 2024; Parks Canada). Unfortunately, due to reasons not entirely known, Lake Whitefish populations have significantly declined over the last twenty years (Cunningham & Dunlop, 2023), with some scientists believing the fish could disappear from some lakes entirely within the next five years (Katz, 2025). 
+
+![fishDecline](assets/whitefish_decline.png)
+*Decline in Body Condition of Lake Whitefish (Herbst & Marsden, 2013)*
+
+In the Great Lakes system, zooplankton are the foundation of the food web, with all fish feeding only on zooplankton at some point during their life cycles (US EPA, 2016). Given the sequential nature of the food chain, understanding downstream effects on larger organisms (like whitefish) begins with evaluating the basal organisms. In freshwater ecosystems, this involves understanding the variety and density of zooplankton populations. Given the economic importance of the Great Lakes ecosystem and the responsibility to protect whitefish, the provincial government requires updated tools to automatically classify and enumerate zooplankton organisms. 
+
+
+
+
+
+
 # Classifying Zooplankton in Lake Huron
 A machine learning project to classify zooplankton in Lake Huron using image and plain-text data. Data provided by Ontario Ministry of Natural Resources (MNR). 
 
