@@ -1,3 +1,6 @@
+# Classifying Zooplankton in Lake Huron: A Collaborative Deep Learning Approach
+
+
 ## The Great Lakes Ecosystem
 The Great Lakes and their surrounding ecosystem is the third largest regional economy in the world (Ontario Environment and Energy). In Ontario, the lakes are hugely important to the provincial economic landscape, contributing to 91% of the provincial GDP. 
 
