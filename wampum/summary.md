@@ -1,6 +1,6 @@
 ---
-layout: no-logo
 title: Wampum Project Overview
+no_logo: true
 ---
 
 ## About this project 
