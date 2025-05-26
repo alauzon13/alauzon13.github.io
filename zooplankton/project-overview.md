@@ -35,6 +35,9 @@ A **collaborative deep-learning** approach was used to develop the prediction al
 
 ![architecture](assets/architecture.png)
 
+*right-click to open in a new tab for a clearer graphic*
+
+
 ### MLP
 
 Multilayer perceptrons (MLPs) can be thought of as the most foundational form of a neural network. In general, the neural network is designed to resemble a human brain in which groups of neurons are organized hierarchically in layers (Kerr et al., 2020). Data is input to the network (analogous to a “signal” in a brain), and certain neurons are activated that pass on the data to all connected neurons in the following layers. 
