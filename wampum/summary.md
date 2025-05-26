@@ -1,6 +1,6 @@
 ---
 title: Wampum Project Overview
-layout: default
+layout: page
 ---
 
 ## About this project 
