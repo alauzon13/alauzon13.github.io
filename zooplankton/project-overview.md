@@ -68,7 +68,8 @@ On the test data, the final collaborative model displayed 98% accuracy. As this 
 
 Though this project was conducted using a small sample from the original dataset, it provides strong evidence for a collaborative learning approach to zooplankton classification. Future work could explore CNN architectures specifically designed for greyscale vignettes, as the chosen architecture was originally built for colored images. If resources permit, applying this framework to the entire dataset would provide a more robust understanding of how a collaborative approach performs on minority classes. 
 
- ## Citations
+## Citations
+ 
 Bardwell, N. (2024). From Waters to Table: The Story of the Great Lakes Whitefish. Native News Online, https://nativenewsonline.net/sovereignty/from-waters-to-table-the-story-of-the-great-lakes-whitefish
 
 Bonin-Font, F., Buenvaron, G., Kane, M., & Tuval, I. (2024). Microplankton Discrimination in FlowCAM Images Using Deep Learning: Proceedings of the 19th International Joint Conference on Computer Vision, Imaging and Computer Graphics Theory and Applications, 606–613. https://doi.org/10.5220/0012460200003660
