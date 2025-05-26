@@ -20,6 +20,18 @@ I'm a current graduate student in the [Department of Statistical Sciences](https
 - [Wampum Belts as an Alternative Data Source](wampum/summary.md), Summer 2023/Summer 2025
 
 
+## Papers 
+Under the supervision of Harsh Kumar and Dr. Joseph Williams, I was able to contribute to the following papers during a summer research position sponsored by receipt of a University of Toronto Excellence Award (2022). 
+
+- Harsh Kumar, Ilya Musabirov, Jiakai Shi, **Adele Lauzon**, Kwan Kiu Choy, Ofek Gross, Dana Kulzhabayeva, Joseph J. Williams. ["Exploring The Design of Prompts For Applying GPT-3 based Chatbots: A Mental Wellbeing Case Study on Mechanical Turk."](https://arxiv.org/abs/2209.11344) arXiv preprint arXiv:2209.11344 (2022).
+- Harsh Kumar, Jiakai Shi, Kwan Kiu Choy, Tong Li, Rachel Kornfield, Jonah Meyerhoff, **Adele Lauzon** Ananya Bhattacharjee, Chris Karr, David Mohr, Anna Rafferty, Sofia Villar, Nina Deliu, Joseph Jay Williams. ["Using Adaptive Bandit Experiments to Increase and Investigate Engagement in Digital Mental Health."](https://drive.google.com/file/d/1mF8g4RxucLEoDw7B7Qs5MHyeEg_KiNUF/view) (Session Presentation & Poster) AI for Behaviour Change (AI4BC) workshop at AAAI-23.
+- Harsh Kumar, Jiakai Shi, Ilya Musabirov, **Adele Lauzon** Meagan Peters, Ofek Gross, Joseph J. Williams. ["Prompt Engineering to Improve Experiences with Large Language Model-Administered Support: A Digital Experiment with Online Crowdworkers."](https://drive.google.com/file/d/11o4GSK6Xaa3vBBM-y1nR0Kgy36i69GVW/view) (Parallel Talk) Conference on Digital Experimentation (CODE 2022).
+
+
+
+
+
+
 
 
 
