@@ -12,6 +12,6 @@ Python/Scikit-learn (transfer learning, neural network development, ensemble mod
 
 ## Project links
 - [Project Code](FullPipeline_trimmed.ipynb)
-- [Project Overview](overview.md) (high-level)
+- [Project Overview](project-overview.md) (high-level)
 - [Final Report](Zooplankton_Final_Report.pdf) (in-depth, academic report)
   
