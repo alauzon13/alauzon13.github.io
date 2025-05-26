@@ -4,4 +4,5 @@ I'm a current graduate student in the [Department of Statistical Sciences](https
 
 ## Projects
 - [Wampum Belts as an Alternative Data Source](wampum/summary.md)
+- [Data-driven Strategy for Improving Canada's Innovation Score](canada-innovation/summary.md)
 
