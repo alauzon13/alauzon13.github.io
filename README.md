@@ -4,3 +4,4 @@ I'm a current graduate student in the [Department of Statistical Sciences](https
 ## Projects
 - [Wampum Belts as an Alternative Data Source](wampum/readme.md)
 
+
