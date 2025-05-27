@@ -12,6 +12,8 @@ I'm a current graduate student in the [Department of Statistical Sciences](https
 
 
 ## R
+- [Does Vaccination Status have a Causal Relationship with Voting Intention? Analyzing Poll Data from the 2022 Texas State Elections](vaccination-status/summary.md), Winter 2021
+- [Analyzing Characteristics of Mass Shootings in the USA, 1966-2021](mass-shootings/summary.md), Winter 2022
 - [Uncovering Patterns in MLB Statcast Data](mlb-performance/summary.md), Spring 2025
 
 
