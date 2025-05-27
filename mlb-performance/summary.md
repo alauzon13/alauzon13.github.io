@@ -17,5 +17,5 @@ R, data visualization, statistical analysis/machine learning, writing
 
 ### Project Links
 - [Final Report](Report.pdf)
-- [R code](MLB_Final.rmd)
+- [R code](https://github.com/alauzon13/alauzon13.github.io/blob/main/mlb-performance/MLB_Final.Rmd)
 
