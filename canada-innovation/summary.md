@@ -17,5 +17,5 @@ Python, statistical analysis/machine learning (Principal Component Analysis, K-m
 
 ### Project Links
 - [Consulting Report](ConsultingReport.pdf)
-- [Model development Python notebook](./Model_Development.ipynb)
-- [PCA/K-means Python notebook](./MIE1624_Project_PCA_Clustering.ipynb)
+- [Model development Python notebook](https://github.com/alauzon13/alauzon13.github.io/blob/main/canada-innovation/Model_Development.ipynb)
+- [PCA/K-means Python notebook](https://github.com/alauzon13/alauzon13.github.io/blob/main/canada-innovation/MIE1624_Project_PCA_Clustering.ipynb)
