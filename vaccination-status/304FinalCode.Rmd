@@ -1,0 +1,510 @@
+---
+title: "Does Vaccination Status Affect Voting Intention? A Look into the 2022 Texas Gubernatorial Election"
+author: "Adele Lauzon - 1005695801"
+date: December 17, 2021
+output:
+  pdf_document: default
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(openintro)
+library(haven)
+library(tidyverse)
+library(dplyr)
+library(gridExtra)
+library(grid)
+library(lattice)
+library(kableExtra)
+```
+
+
+# Abstract
+
+The 2022 Texas gubernatorial election will be the first in the state since the onset of the COVID-19 pandemic, imbuing it with a unique set of pressures and potential impacts. Given the researched relationship between political party and vaccination status (Palosky, 2021), it may be beneficial for politicians to understand whether vaccination status has a causal effect on voting intention. Using survey data from the University of Texas Texas Politics Project, propensity score matching was employed to answer this question. It was found that vaccination status does have a causal effect on voting for Greg Abbot (republican incumbent)--however, political party representation was not similar between the treatment (vaccinated) and control (unvaccinated) groups. With this limitation considered, it was concluded that being vaccinated significantly reduces a Texan voter's probability of voting for Greg Abbot in the 2022 gubernatorial election. 
+
+Key words included in this report: **Gubernatorial, Vaccinated/Unvaccinated, Causal Inference, Propensity Score Matching**
+
+# Introduction
+
+November 8, 2022, will bring a gubernatorial election to the state of Texas. Texas provides an interesting landscape for such events, as it is consistently ranked as one of the most politically polarizing states in America (Wermund, 2020)--it is home to both the left- and right-most extremes of American political ideologies. This particular election is of interest, as Texas has become the center of national conversation amidst controversial abortion and voter-identification laws; it is believed that this race will be the "most important [Texas] has experienced in a long time" (Svitek, 2021). 
+
+Additionally, this will be the state's largest election since the onset of the COVID-19 crisis. Prior research has identified a correlation between political party and vaccination status (Palosky, 2021), but it is unknown if being vaccinated *causes* an individual to vote for a particular party. Using survey data from the University of Texas, this report will aim to answer, **Does vaccination status have a causal effect on propensity to vote for Greg Abbot?**
+
+Abbot (republican incumbent) has prohibited mask and vaccine mandates statewide (Towey, 2021), and it has been found that unvaccinated adults are three times more likely to be republican than democrat (Palosky, 2021). With this evidence, it is hypothesized that vaccination status does indeed have a causal effect on voting for Abbot; specifically, it is estimated that being vaccinated reduces the probability of an individual voting for Abbot.
+
+This analysis holds value for politicians, campaign managers, volunteers--all those who are invested in this election. If the hypothesis is proven true, stakeholders will be able to optimize their efforts by narrowing in on one objective--either increasing or leveling vaccination rates, depending on party. Consequently, said stakeholders may be able to have a real, targeted impact on their probability of (re)election. 
+
+
+This report will consist of four sections: 
+
+* **Data:** The data is presented, cleaned, and explored. Numerical summaries are calculated for the appropriate variables, and histograms/barplots are used to understand variable distributions. 
+
+* **Methods:** The methodology--causal inference via propensity score matching--is introduced, justified, and explained in detail (assumptions and step-by-step instructions made clear). 
+
+* **Results:** The methodology is applied to the data, hypotheses are tested, and the research question is answered. Any limitations noted. 
+
+* **Conclusions:** Analysis is summarized; limitations of the analysis are discussed and potential next steps are proposed. 
+
+
+Important terminology in this report includes:
+
+* Gubernatorial: In relation to a governor or office of the governor (Oxford Languages). 
+
+* Democrat (the "left"): A member of the Democratic party, which "emphasizes social equality and equal opportunity" (Wikipedia).
+
+* Republican (the "right"): A member of the Republican party, which "supports lower taxes, free-market capitalism, & deregulation" (Wikipedia).
+
+* Religiosity: Strength of religious beliefs. 
+
+* Incumbent: The current holder of office.  
+
+* Vaccinated/Unvaccinated: Indivative of **full vaccination** (2 doses) against COVID-19. 
+
+* 1-Nearest-Neighbor: A matching technique; for individual $i$, select the individual $j$ with the smallest distance from $i$. See **Methods** for matching criteria. 
+
+* Propensity Score Matching: A matching technique that matches observations by their propensity for treatment; see **Methods** for more.
+
+* Causal Inference: The process of deriving causality from observational data; see **Methods** for more.
+
+
+# Data
+
+## Data Collection Process
+
+The data for this analysis comes from the Texas Politics Project at the University of Texas (Texas Politics Project, 2021). The final sample selection occurred in three stages. First, researchers polled 1308 individuals, using the YouGov panel. This proprietary, opt-in survey panel includes about 20,000 active panelists who are Texas residents. Then, a simple random sample of all Texan voters was conducted (target sample, using census data). Then, for each member of the target sample, a "match" was selected from the pool of poll respondents using a 1-Nearest-Neighbor approach. By using this "match-down" technique, the final sample has similar properties to a true random sample. This method resulted in a final sample of 1200 individuals. 
+
+Though this final sample should be similar to a random sample drawn from the population, the respondent pool may be plagued by selection bias. Individuals who opted in may feel strongly about politics, and consequently may have more extreme views (skewing both left and right). Therefore, it is possible that this survey technique is excluding individuals who are less involved in politics, or those with more moderate views. Additionally, it is unclear if or how this survey handled mapping gender to sex. The poll contained gender information, but is possible that the random sample contained sex information; if this is the case, it is possible that there were non-binary responses in the original 1308-observation sample that were either altogether removed or problematically mapped. As this procedure is unclear, this obscurity will be considered a limitation.
+
+
+## Data Summary
+
+As stated, the data comes from an October 2021 poll by the University of Texas about various political issues (gun control, abortion rights, systemic racism, etc.). The data began with 1200 observations of 154 different variables representing questions from the poll. 
+
+```{r, include = FALSE}
+
+# Here you can load in and clean the data (you may need to do the cleaning in a separate R script). 
+
+# You may need additional chunks, in case you want to include some of the cleaning output.
+
+data <- read_sav("utex0044f_output.sav")
+data$Q21A <- as.factor(data$Q21A)
+data$gender <- as.factor(data$gender)
+data$Q29 <- as.factor(data$Q29)
+data$PID3_utex <- as.factor(data$PID3_utex)
+data$IMPORT <- as.factor(data$IMPORT)
+levels(data$Q21A) <- c("Abbot", "O'Rourke", "Someone else", "No opinion", "Skipped") 
+levels(data$gender) <- c("Male", "Female")
+levels(data$IMPORT) <- c("Extremely important", "Somewhat important", "Not very important", "Not at all important", "Skipped") 
+levels(data$PID3_utex) <- c("Democrat", "Republican", "Independent", "Other", "Not Sure") 
+#VaccinationStatus==1, Vaccinated
+data_clean <- data %>% filter(Q29 != "8" | Q29 != "5" | IMPORT != "Skipped" | Q21A != "Skipped") %>% mutate(Vaccinated = as.integer(ifelse(Q29=="1", 1, 0)),
+                                                                  age = 2021-birthyr, 
+                                                                  VoteAbbot = case_when(Q21A == "Abbot" ~1, 
+                                                                                        Q21A == "O'Rourke"~ 0, 
+                                                                                        Q21A == "Someone else" ~ 0),
+                                                                  religiosity = IMPORT, 
+                                                                  party = PID3_utex) %>% select(age,Vaccinated, VoteAbbot, gender, religiosity, party)
+data_clean <- na.omit(data_clean)
+```
+
+Given the size of the dataset and the way in which responses were coded, some cleaning and wrangling was necessary. For all variables of interest (see below), all "Skipped" responses, as well as any NA values, were omitted. *Age* was created by subtracting the respondent's birth year from 2021. The categorical variables *Party* (PID3), *Religiosity* (IMPORT), and *Gender* were simply renamed and levels re-labeled to be more meaningful in analysis outputs. *Vote Abbot* (Q21A) was recoded to be a binary variable, taking 1 if the respondent indicated they would vote for Abbot, and 0 if they answered 0'Rourke or someone else (all other responses discarded). *Vaccinated* was mutated to take 1 if the individual indicated they were fully vaccinated, and 0 otherwise ("skipped" and "unsure" answers discarded). This cleaning process reduced the original 1200 observations spanning 154 variables to 1105 observations, spanning 6 variables. 
+
+Below is a formal description of the aforementioned variables: 
+
+* *Vote Abbot*: Binary variable, taking 1 if the respondent indicated they were likely to vote for Abbot, and 0 otherwise.
+
+* *Vaccinated*: Binary variable, taking 1 if the respondent was fully vaccinated at the time of survey conduction, and 0 otherwise. 
+
+* *Age*: Numeric variable, representing the age of the respondent. 
+
+* *Party*: Categorical variable, representing the political party affiliation of the respondent. May take one of "Democrat," "Republican," "Independent," "Other," or "Not sure."
+
+* *Religiosity*: Categorical variable, representing the importance of religion to the respondent. May take one of "Extremely important," "Somewhat important," "Not very important," or "Not at all important."
+
+* *Gender*: Categorical variable, taking one of "Male" or "Female."
+
+
+### Numerical Summaries 
+
+The table below displays some brief summary measures for *Age*, the numerical predictor: 
+
+|     | Min | 1st Q | Median | Mean  | 3rd Q | Max | Standard Deviation |
+|-----|-----|-------|--------|-------|-------|-----|--------------------|
+| Age | 20  | 41    | 56     | 54.05 | 65    | 88  | 15.684             |
+
+Table: Numerical Summary of *Age*
+
+The youngest respondent in the poll was 20 years old, and the oldest was 88 years old. The median and mean of mid-50s values indicate that the majority of respondents were in their 50s. Finally, it appears as though age may be left-skewed. Notice that the difference between the 1st quartile and the median (15) is larger than the distance between the median and the 3rd quartile (11). This skewness is corroborated by the mean (54.05) being slightly lower than the median (56).
+
+### Categorical Summaries 
+
+|            | 0           | 1          |
+|------------|-------------|------------|
+| Proportion | 0.526       | 0.474      |
+
+Table: Summary of *Vote Abbot*
+
+While a higher proportion of respondents indicated they were not intending to vote for Abbot, the difference is quite small (0.052). 
+
+
+|            | Unvaccinated | Vaccinated |
+|------------|-------------|------------|
+| Proportion | 0.266       | 0.734      |
+
+Table: Summary of *Vaccinated*
+
+The vast majority of respondents were fully vaccinated--so, it appears skewed in the direction of being vaccinated.
+
+|            | Male        | Female     |
+|------------|-------------|------------|
+| Proportion | 0.460       | 0.540      |
+
+Table: Summary of *Gender*
+
+While there are slightly more female respondents, the difference is small enough (0.08) to consider this variable balanced. 
+
+
+|            | Democrat | Republican | Independent | Other | Not Sure |
+|------------|----------|------------|-------------|-------|----------|
+| Proportion | 0.329    | 0.331      | 0.289       | 0.043 | 0.009    |
+
+Table: Summary of *Party*
+
+The majority of respondents were either democrats, republicans, or independents, with all three categories having similar proportions.  
+
+|            | Extremely Important  | Somewhat Important | Not Very Important | Not At All Important |
+|------------|----------------------|--------------------|--------------------|----------------------|
+| Proportion | 0.387                | 0.296              | 0.130              | 0.186                |
+
+Table: Summary of *Religiosity*
+
+The majority of respondents indicated religion was extremely important to them, and the fewest indicated that religion was not very important to them.
+
+\newpage 
+
+### Visual Summaries
+
+```{r, include = FALSE}
+summary(data_clean$age)
+summary(data_clean$VoteAbbot)
+summary(data_clean$Vaccinated)
+summary(data_clean$party)
+summary(data_clean$religiosity)
+summary(data_clean$gender)
+
+```
+
+```{r, include=FALSE}
+
+data_clean_labeled <- data_clean %>% mutate(voteLabel =ifelse(VoteAbbot==1, "Abbot", "Other"), 
+                                            vaxLabel = ifelse(Vaccinated==1, "Vaccinated", "Not Vaccinated"))
+# Use this to calculate some summary measures. 
+plot_age <- data_clean %>% ggplot(aes(x=age)) +geom_histogram(aes(y=..density..), color="black", fill=" blue", alpha=0.3, binwidth = 3) + labs(
+       x = "Age",
+       y = "Density" )+ 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_vote <- data_clean_labeled %>% ggplot(aes(voteLabel)) + geom_bar() + labs(x = "Voting Intention",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_vax <- data_clean_labeled %>% ggplot(aes(vaxLabel)) + geom_bar() + labs(x = "Vaccination Status",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+bar_religion <- data_clean %>% ggplot(aes(religiosity)) + geom_bar() + labs(x = "Religiousity",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_gender <- data_clean%>% ggplot(aes(x=gender)) + geom_bar() + labs(x = "Gender",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_party <- data_clean %>% ggplot(aes(x=party)) + geom_bar() + labs(x = "Party Affiliation",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+```
+
+```{r, echo=FALSE, fig.width=10, fig.height=6, fig.cap="Variable Summaries"}
+grid.arrange(plot_age, bar_vote, bar_vax, bar_religion, bar_party, bar_gender, nrow=3, ncol=2)
+
+```
+
+
+Figure 1 displays summaries of both the numerical and categorical predictors. Beginning with *Age*, the histogram on the top left corroborates the findings from the numerical summary. Age does in fact appear to be left skewed, and in fact may be bi-modal--the data appears to have one center at about 40, and another near 60. It is logical that the mean and median (54.05, and 56) would fall in between these modes. 
+
+Slightly more respondents indicated they intend to vote for someone other than Abbot than those who indicated they would vote for Abbot. Similarly, only slightly more respondents were female than male (there were no non-binary respondents). In contrast, there were significantly more respondents that were fully vaccinated than those who were not. Further, while there was a slight majority in favor of republican respondents, there were similar numbers of republican, democrat, and independent-identifying respondents; there were much fewer that had other affiliations or were unsure. Finally, more respondents indicated that religion was "extremely important" to them than any other category. The fewest number of respondents indicated that religion was "not very" important to them. 
+
+
+All analysis for this report was programmed using `R version 4.0.4`.
+
+
+# Methods
+
+Recall the research question--**Does vaccination status have a causal effect on propensity to vote for Greg Abbot?** Traditionally, identifying a causal relationship between variables involves a scientific experiment, complete with treatment and control groups. For example, to determine if a particular medicine causes drowsiness, participants would be randomly assigned either the medicine or a placebo (an identical pill with no medicine), and drowsiness would be somehow measured. To reduce bias, these experiments are often "double-blind"--where neither the participant nor the experimenter know who is receiving what treatment (National Cancer Institute). However, how is causation inferred in scenarios where the "treatment" cannot be randomly administered, and "blind-ness" is not attainable? Beyond feasibility, many interesting variables cannot be ethically administered--like smoking. In the context of this research, it is neither feasible nor ethical to randomly assign individuals to be vaccinated or unvaccinated, as the consequences of either decision extend far beyond the scope of the study. Without the option of randomly assigning treatment, how can we understand whether vaccination status has a causal effect on voting intention? This is where we can employ **causal inference**. 
+
+Causal inference is the process by which causes are inferred from observational data (Wang, 2021). Under this large umbrella exist a few different tools that all accomplish the same goal, but differ in usefulness depending on the nature of the data and research. One way to emulate random assignment is to match observations that are very similar in all ways other than treatment (in the context of this research, similar in every way besides vaccination status). An obvious matching algorithm is the 1-Nearest-Neighbor approach; however, when working with many variables, you quickly end up in very high dimensional space with very small cells. This is where **propensity score matching** becomes helpful. 
+
+Propensity score matching involves assigning some probability (propensity) of treatment to each observation, regardless of whether treatment was actually received. Practically, this often looks like building a logistic regression model to predict treatment using all other independent variables. Then, the actual matching can be done via a built-in r function within the `arm` package (Hill & Gelman, 2007). This function uses the nearest-neighbor approach to match individuals based on their propensity of belonging to the treatment group, where one member of the match was in fact in the treatment group, and the other member was not. By pairing up individuals in the two groups based on their propensity to "receive treatment," rather than creating many cells for specific characteristics, the dimensionality of the problem is greatly reduced. Additionally, by matching individuals by their likelihood of receiving treatment, when in reality one did and one did not, researchers mimic the act of "randomly assigning" treatment. Finally, the matched data can be used to build the final model predicting the response using the same independent variables, with the addition of the treatment group. The significance of the treatment predictor in this model summary will answer the question of whether or not treatment has a causal effect on the response. 
+
+To put the above methodology into the context of this research: the treatment is *Vaccinated*, and the response is *Vote Abbot*. Primarily, a logistic model will be built to predict *Vaccinated* using *Party, Gender, Religiosity*, and *Age*. The results of this model indicate the propensity of an individual to be vaccinated. Then, the `matching` function in the `arm` package will be used to match vaccinated and unvaccinated individuals based on propensity to be vaccinated. Finally, using the matched data, a logistic model using *Vaccinated*, *Party, Gender, Religiosity*, and *Age* to predict *Vote Abbot* will be created. As the other predictors could be considered confounding variables if omitted (particularly Party (Palosky, 2021)), they are included in this model to reduce confounding. The significance of Vaccination Status in this model will indicate whether this predictor does indeed have a causal effect on the response. 
+
+Propensity score matching does rely on an assumption--that the treatment and control groups are reasonably balanced regarding the other observable traits. For example, the vaccinated and unvaccinated groups should ideally have similar proportions of men and women. 
+
+
+
+# Results 
+
+```{r, include = FALSE}
+
+prop_model <- glm(Vaccinated ~ religiosity + gender+age+party, data=data_clean, family=binomial)
+summary(prop_model)
+data_clean <- data_clean %>% 
+  mutate(predicted_propensity = 
+           predict(prop_model, data = data_clean, type = "response"))
+
+data_clean <- 
+data_clean %>% 
+  arrange(predicted_propensity, Vaccinated)
+
+#install.packages("arm", repos = "http://cran.us.r-project.org")
+library(arm)
+
+matches <- matching(z = data_clean$Vaccinated, 
+                         score = data_clean$predicted_propensity)
+
+data_clean <- cbind(data_clean, matches)
+
+## Now we can reduce the data to only contain the matches
+data_matched <- 
+  data_clean %>% 
+  filter(match.ind != 0)
+
+# Now we can examinethe 'effect' of being in the treatment group on
+# on the average bill length.
+
+prop_reg_model <- 
+  glm(VoteAbbot ~ Vaccinated+religiosity + gender+age+party, 
+                data = data_matched, family=binomial)
+data_matched <- data_matched %>% 
+  mutate(prob_voteAbbot = 
+           predict(prop_reg_model, data = data_matched, type = "response"))
+
+data_matched$fitted <- fitted(prop_reg_model)
+data_matched$fitted_log <- prop_reg_model$fitted.values
+
+summary(prop_reg_model)
+```
+
+Primarily, we must create the matched dataset. A logistic model was fit to predict Vaccination Status using Religiosity, Gender, Age, and Party. This yielded the following results: 
+
+$log(\frac{p}{1-p})=0.946+0.097(\text{Somewhat important})+0.706(\text{Not very})+1.314(\text{Not at all})-0.132(\text{Female})+0.020(\text{Age})-1.928(\text{Republican})-1.260(\text{Independent})-1.657(\text{Other})-1.824(\text{Not sure})$, where $p$ is the probability of being vaccinated. All variables besides Age were found to be significant in this model. 
+
+Then, this model was applied to each observation in the sample to get that individual's probability of being vaccinated. Notice that the raw output of this model is like likelihood, not the probability. Therefore, the `predict` function was applied to these outputs to derive the desired measure. 
+
+The matching process was then conducted. As mentioned in **Methods**, there is a useful function (`matching`) that handles this for us. As stated, it matched Vaccinated and Unvaccinated individuals based on their probability of being Vaccinated. Since there are fewer unvaccinated (294) than vaccinated individuals (811), the maximum number of pairs we can have is $2 \cdot 294=588$ pairs. As such, the matching process reduces the dataset down to 588 matched observations. This matched data now has the properties of an experimental group, where treatment was randomly assigned.    
+
+Now that we have the matched data, it's a good idea to check the assumption--that the covariates are balanced between the treatment and control groups. The figure below displays that information: 
+
+```{r, echo=FALSE, fig.width=10, fig.height=8, fig.cap="Variable Summaries by Treatment Group"}
+
+vax_data <- data_matched %>% filter(Vaccinated == 1) %>% mutate(voteLabel =ifelse(VoteAbbot==1, "Abbot", "Other"))
+
+unvax_data <- data_matched %>% filter(Vaccinated == 0) %>% mutate(voteLabel =ifelse(VoteAbbot==1, "Abbot", "Other"))
+
+plot_age_vax <- vax_data %>% ggplot(aes(x=age)) +geom_histogram(aes(y=..density..), color="black", fill=" blue", alpha=0.3, binwidth = 3) + labs(
+       x = "Age",
+       y = "Density", title="Vaccinated" )+ 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+plot_age_unvax <- unvax_data %>% ggplot(aes(x=age)) +geom_histogram(aes(y=..density..), color="black", fill=" blue", alpha=0.3, binwidth = 3) + labs(
+       x = "Age",
+       y = "Density",title="Unvaccinated" )+ 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+bar_vote_vax <- vax_data %>% ggplot(aes(voteLabel)) + geom_bar() + labs(x = "Voting Intention",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_vote_unvax <- unvax_data %>% ggplot(aes(voteLabel)) + geom_bar() + labs(x = "Voting Intention",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_religion_vax <- vax_data %>% ggplot(aes(religiosity)) + geom_bar() + labs(x = "Religiosity",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+bar_religion_unvax <- unvax_data %>% ggplot(aes(religiosity)) + geom_bar() + labs(x = "Religiosity",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_gender_vax <- vax_data %>% ggplot(aes(x=gender)) + geom_bar() + labs(x = "Gender",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_gender_unvax <- unvax_data %>% ggplot(aes(x=gender)) + geom_bar() + labs(x = "Gender",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_party_vax <- vax_data %>% ggplot(aes(x=party)) + geom_bar() + labs(x = "Party Affiliation",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+bar_party_uvax <- unvax_data %>% ggplot(aes(x=party)) + geom_bar() + labs(x = "Party Affiliation",y="Count") +theme(text = element_text(size = 10)) + 
+  theme(plot.title = element_text(hjust = 0.5))  +theme(
+  plot.caption = element_text(hjust = 0)
+  )
+
+
+grid.arrange(plot_age_vax, plot_age_unvax, bar_vote_vax, bar_vote_unvax, bar_religion_vax, bar_religion_unvax, bar_gender_vax, bar_gender_unvax, bar_party_vax, bar_party_uvax, ncol=2)
+
+
+
+
+
+```
+
+It appears as though some variables are more evenly represented between the treatment and control groups than others. *Age* appears to be similarly distributed, appearing left-skewed and bi-modal in both groups. The mean of *Age* in the treatment group (vaccinated) is 55.313, and the mean of the control group is 53.548. *Vote Abbot* appears similar between the two groups, with the majority of respondents indicating they intended to vote for Abbot. *Religiosity* and *Gender* also appear to follow similar trends between the two groups. The most stark imbalance is regarding *Party*; recall from the visual summaries of the entire dataset (see **Data**), there were similar proportions of democrats and republicans. The matching process has reduced the number of vaccinated democrats to 0, and the number of unvaccinated democrats to 34. Independents now make up a larger proportion of both groups, as well as "other" and "not sure" respondents. This evident imbalance should certainly be considered a limitation moving forward. 
+
+Now that we have explored the matched data, we can examine the effect Vaccination Status has on Vote Abbot, a final logistic model was fit on the *matched* data, yielding the following results:
+
+$log(\frac{q}{1-q})=-2.501-1.43(\text{Vaccinated})-0.462(\text{Somewhat important})-0.183(\text{Not very})-1.04(\text{Not at all})-0.501(\text{Female})+0.022(\text{Age})+5.054(\text{Republican})+2.951(\text{Independent})+2.984(\text{Other})+1.227(\text{Not sure})$, where $q$ is the probability of voting for Abbot. 
+
+Age is now significant in this model, indicating that while it may not have a relationship with *Vaccinated*, it may have one with *Vote Abbot*. All other variables besides *Religiosity* were significant; conversely to Age, Religiosity may have a relationship with *Vaccinated*, but not with *Vote Abbot*. The ubiquitous significance of other variables indicates that they are significant in predicting both the treatment and the response. Finally, it is found in the model summary that *Vaccinated* is significant, with a very small p value (5.05e-08). This indicates that we can conclude that *Vaccinated* does indeed have a causal effect on the propensity of an individual to vote for Abbot. Specifically, the negative sign of the coefficient indicates that being vaccinated causes an individual to be less likely to vote for Greg Abbot. 
+
+To get a better idea of the relationship between the treatment and response, see the graph below:
+
+
+```{r, echo=FALSE, fig.cap="Outcome by Treatment"}
+data_matched$Vaccinated = as.factor(data_matched$Vaccinated)
+scatter_abbot<- ggplot(data_matched, aes(x=age, y=prob_voteAbbot, color=Vaccinated)) +
+  geom_point(size=0.5, shape=23) +
+  theme(text = element_text(size = 5)) + 
+  theme(plot.title = element_text(hjust = 0.5)) +labs(
+       x = "Age",
+       y = "Probability of Voting Abbot", title="Age vs Probability of Voting Abbot (by Treatment)" )+ theme(text = element_text(size = 10))+
+  geom_smooth(method = "glm", 
+    method.args = list(family = "binomial"), 
+    se = FALSE) 
+
+scatter_abbot 
+
+
+
+```
+
+The orange line represents the propensity to vote for Abbot for unvaccinated individuals, and the blue line represents the same propensity for vaccinated individuals. The spread of ages appears to be the same for each group, which is corroborated by the histograms presented earlier in this section. The lines-of-best-fit for each group seem to have similar curvature, but different intercepts. Thus, it appears as though on average, unvaccinated individuals have a higher probability of voting Abbot, which is supported by the claim that vaccination status has a causal effect on probability of voting Abbot. 
+
+# Conclusions
+
+The politically polarized state of Texas provides an interesting stage for governmental processes, particularly for state- and national-level elections. Admist a medley of highly schismatizing topics, the 2022 Texan gubernatorial election will be a critical moment for the state. A unique and novel element to this election is COVID-19--past, present, and future policies regarding the virus may play an important role in how individuals use their vote. Given the researched association between political party and vaccination status (Palosky, 2021), this report aimed to answer if there is in fact a **causal** relationship between vaccination status and voting for Greg Abbot (republican incumbent). Given the aforementioned research, it was hypothesized that a causal relationship does exist between vaccination status and voting Abbot.
+
+The data used to answer this question came from a University of Texas poll of demographics and voting intentions of the Texan public. Given the observational nature of this poll (vaccination status cannot be randomly assigned), determining causality requires the implementation of causal inference, specifically propensity score matching. Under the assumption that covariates are balanced between treatment and control groups, propensity score matching is a method of emulating the "random assignment" element of experiments that permits determining causality. Individuals are paired up that have the same probability of "receiving treatment" (being vaccinated), where one member of the match actually received treatment and the other did not. Using this matched data, a model predicting the response is built; causality of the treatment on the response is determined by the significance of the treatment in this model summary. 
+
+The results find that unfortunately, aspects of the data do not seem balanced between the treatment and response groups--particularly in regard to political party. While it is not likely to get perfectly matched data in the real world, the significant imbalance in this study was noted as a limitation (see **Weaknesses**). The model predicting propensity to vote for Abbot using *Vaccinated, Party, Gender, Religiosity,* and *Age* yielded all significant predictors other than Religiosity. Therefore, it can be deduced that vaccination status does seem to have a causal effect on an individual's propensity to vote for Greg Abbot. Additionally, the negative coefficient of the treatment variable indicates that being vaccinated does *decrease* and individual's probability of voting for Abbot.
+
+These findings have significance beyond the scope of this project. As mentioned earlier, there are a number of issues that initially appear equally pivotal in this election--gun control, abortion rights, systemic racism, COVID-19 policies, immigration--tackling every matter with the same intensity may not be feasible for politicians and their teams. Knowing that vaccination status alone has a causal effect on voting intention may allow these stakeholders to narrow down their focus (on either increasing or leveling vaccination rates, depending on the party), enabling them to have a more poignant, targeted impact on their probability of (re)election. 
+
+## Weaknesses
+
+There a number of weaknesses in this analysis, beginning with the data itself. While the matching technique used does allow the final dataset to have similar properties to a truly random sample, it is not void of problems. Firstly, the original 1308 poll respondents voluntarily took a survey advertised as being political; volunteer-based polls often contain selection bias, as typically those with extreme opinions are more likely to participate (Salkind, 2010). Therefore, it is possible that some of this residual bias remains in the survey, even after the matching process. 
+Additionally, the precise matching technique is a bit unclear, particularly regarding gender. It is possible that the census data used for matching measured sex rather then gender, which would involve matching the original sample's gender variable to sex. This process can be tricky when it comes to handling non-binary individuals, and preserving their identity and integrity should be prioritized. Though gender did appear significant in the final model, non-binary responses could have added important information that would have altered this result. 
+
+Another weakness is the covariate imbalance between the treatment and control groups (in the matched data), particularly regarding political party affiliation. It is not surprising that party imbalance does exist between the vaccinated and unvaccinated groups--unvaccinated adults are three times more likely to be republican than democrat (Palosky, 2021)--it does not erase the assumption violation. 
+
+
+## Next Steps
+
+As previously mentioned, a severe limitation to this analysis is the imbalance of party affiliation between the vaccinated and unvaccinated groups. While this is contextually unsurprising, it does limit the ability to be entirely conclusive in the analysis. One remedy may be finding a larger dataset, or one that simply includes more unvaccinated democrats. It is also possible that a more sophisticated matching technique might have permitted more unvaccinated democrats to remain in the matched dataset. As such, future analysis should include testing multiple matching techniques (capiler matching, Mahalnobis distance).
+
+An additional next step would be to take a closer look at the individual relationship between voting intention and vaccination status; presently, the final model includes a number of other predictors, making it difficult to deeply understand how the two are really interacting. It may be wise to create a model that only includes vaccination status--however, it could be argued that such a model is excluding a number of confounding variables. To mitigate that, techniques like restriction or case-controlling may be employed (Pourhoseingholi, Baghestani, & Vahedi, 2012).
+
+## Discussion
+
+The upcoming Texas gubernatorial election is imbued with a variety of unique pressures, the most novel of which is the backdrop of the ongoing COVID-19 pandemic. While incumbent governor Greg Abbot has made his opinions about vaccinations clear by outlawing mask mandates, Texas maintains a relatively high vaccination rate of 56.19 (Adams, 2021). The decision for an individual to be vaccinated can be complicated, and it was found that political party affiliation plays the largest role in that decision (Galston, 2021). Given this known association, it may be beneficial for politicians to have a deeper understanding of the relationship between vaccination status and political intentions--specifically, whether being vaccinated has a causal effect on who you vote for. 
+
+The data to answer this question is observational, requiring the use of causal inference--specifically propensity score matching. It was found that vaccination status does have a causal effect on voting for Abbot (republican incumbent)--however, political party representation was not similar between the treatment (vaccinated) and control (unvaccinated) groups. With this limitation considered, it was concluded that being vaccinated significantly reduces a Texas voter's probability of voting for Greg Abbot in the 2022 gubernatorial election. 
+
+
+# Bibliography
+
+1. Grolemund, G. (2014) *Introduction to R Markdown*. RStudio. [https://rmarkdown.rstudio.com/articles_intro.html](https://rmarkdown.rstudio.com/articles_intro.html). (Last Accessed: December 17, 2021) 
+
+2. Dekking, F. M., et al. (2005) *A Modern Introduction to Probability and Statistics: Understanding why and how.* Springer Science & Business Media.
+
+3.  Allaire, J.J., et. el. *References: Introduction to R Markdown*. RStudio. [https://rmarkdown.rstudio.com/docs/](https://rmarkdown.rstudio.com/docs/). (Last Accessed: December 17, 2021) 
+
+4. Svitek, P. (2021). *Texas' 2022 races coming into focus as candidate fillings close.* The Texas Tribune.  [https://www.texastribune.org/2021/12/13/texas-2022-elections-candidates/](https://www.texastribune.org/2021/12/13/texas-2022-elections-candidates/)
+
+5. Wermund, B. (2020). *Texas is among the most politically polarized states.* The Houston Chronicle. [https://www.houstonchronicle.com/politics/texas/article/Texas-is-among-most-politically-polarized-states-15315223.php](https://www.houstonchronicle.com/politics/texas/article/Texas-is-among-most-politically-polarized-states-15315223.php)
+
+6. Towey, R. (2021). *Texas Gov. Abbott, who banned mask and vaccine mandates, tests positive for Covid.* CNBC. [https://www.cnbc.com/2021/08/17/texas-gov-abbott-who-banned-mask-mandates-tests-positive-for-covid.html](https://www.cnbc.com/2021/08/17/texas-gov-abbott-who-banned-mask-mandates-tests-positive-for-covid.html)
+
+7. Adams, K. (2021). *States ranked by vaccination rates*. Becker's hospital review.  [https://www.beckershospitalreview.com/public-health/states-ranked-by-percentage-of-population-vaccinated-march-15.html](https://www.beckershospitalreview.com/public-health/states-ranked-by-percentage-of-population-vaccinated-march-15.html
+)
+
+8. *Definition of double-blind study.* National Cancer Institute. [https://www.cancer.gov/publications/dictionaries/cancer-terms/def/double-blind-study](https://www.cancer.gov/publications/dictionaries/cancer-terms/def/double-blind-study)
+
+9. Wang, K. (2020). *Causal inference: trying to understand the question of Why.* Towards Data Science. [https://towardsdatascience.com/implementing-causal-inference-a-key-step-towards-agi-de2cde8ea599](https://towardsdatascience.com/implementing-causal-inference-a-key-step-towards-agi-de2cde8ea599)
+
+10. Gelman, A., & Hill, J. (2007). *arm: Data Analysis Using Regression and Multilevel/Hierarchical Models.* CRAN.  [https://cran.r-project.org/web/packages/arm/index.html](https://cran.r-project.org/web/packages/arm/index.html)
+
+11. Palosky, C. (2021). *Unvaccinated Adults are Now More Than Three Times as Likely to Lean Republican than Democratic*. Kaiser Family Foundation. [https://www.kff.org/coronavirus-covid-19/press-release/unvaccinated-adults-are-now-more-than-three-times-as-likely-to-lean-republican-than-democratic/](https://www.kff.org/coronavirus-covid-19/press-release/unvaccinated-adults-are-now-more-than-three-times-as-likely-to-lean-republican-than-democratic/)
+
+12. Pourhoseingholi, M. A., Baghestani, A. R., & Vahedi, M. (2012). *How to control confounding effects by statistical analysis*. Gastroenterology and hepatology from bed to bench, 5(2), 79–83.
+
+13. Salkind, N. J. (2010). *Encyclopedia of research design* (Vols. 1-0). Thousand Oaks, CA: SAGE Publications, Inc. doi: 10.4135/9781412961288
+
+14. Galston, W.A. (2021). *For COVID-19 vaccinations, party affiliation matters more than race and ethnicity.* Brookings. [https://www.brookings.edu/blog/fixgov/2021/10/01/for-covid-19-vaccinations-party-affiliation-matters-more-than-race-and-ethnicity/](https://www.brookings.edu/blog/fixgov/2021/10/01/for-covid-19-vaccinations-party-affiliation-matters-more-than-race-and-ethnicity/)
+
+15. The Texas Politics Project (October 2021). "October 2021 University of Texas/Texas Tribune Poll." The University of Texas. [https://texaspolitics.utexas.edu/polling-data-archive](https://texaspolitics.utexas.edu/polling-data-archive)
+
+\newpage
+
+# Appendix
+
+## A1: Ethics Statement
+
+One ethical consideration that appears met is the lack of any leading or loaded questions in the survey. It appears as though all questions in the survey are absent of any persuasive tone, and the answer choices are not too narrow as to persuade someone to fall into a category in which they do not truly belong, but also not so broad such that the respondent is overwhelmed. 
+
+An ethical concern of this analysis involves the ambiguous mapping of sex and gender in the poll data. To summarize what was stated in **Weaknesses**, the lack of any non-binary responses in the final, matched-down sample calls into question whether the original survey polled any non-binary individuals, and if so, how they were handled. It seems unlikely that the original 1,308 respondent sample would not have a single non-binary response, indicating that any such responses were seemingly discarded altogether. If this is the case, this is highly problematic as non-binary individuals likely occupy a unique space in the political realm, and therefore may contribute important information to the final model. 
+
+
+## A2:  Materials
+
+The survey can be found here: [https://texaspolitics.utexas.edu/polling-data-archive](https://texaspolitics.utexas.edu/polling-data-archive). Please navigate to "OCTOBER 2021 UNIVERSITY OF TEXAS/TEXAS TRIBUNE POLL". See the codebook for a complete list of all questions and options/categories. 
+
+A glimpse of the cleaned data: 
+
+```{r, echo=FALSE}
+
+glimpse(data_clean)
+```
+
+A glimpse of the matched data: 
+
+```{r, echo=FALSE}
+glimpse(data_matched)
+```
+
+A glimpse of the whole dataset: 
+```{r, echo=FALSE}
+(glimpse(data))
+```
+
