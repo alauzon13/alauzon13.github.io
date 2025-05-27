@@ -11,4 +11,4 @@ R, statistical analysis (propensity score matching), writing
 
 ### Project links
 - [Final Report](304Final.pdf)
-- [R Markdown with code](304FinalCode.pdf)
+- [R Markdown with code](https://github.com/alauzon13/alauzon13.github.io/tree/main/vaccination-status)
