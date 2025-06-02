@@ -46,8 +46,13 @@ A model trained on a small dataset like this one is prone to overfitting, which 
 ![aug](assets/augmentation-diag.png)
 
 
-
 ### The Model 
+
+The bread-and-butter for image classifications is the convolutional neural network. 
+
+What is a CNN
+Why transfer learning
+Model setup (epochs etc)
 
 ### The results
 
