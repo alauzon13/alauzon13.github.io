@@ -29,7 +29,7 @@ After inspecting the images, I noticed that product photos of fake bags tended t
 
 After inspecting the images, I noticed that product photos of fake bags tended to have busier, non-empty backgrounds, whereas authenticated bags tended to be in front of plain, white backgrounds. Since I wanted to limit my analysis to the bags themselves, I opted to remove the backgrounds from all images. 
 
-<div style="display: flex; gap: 20px; align-items: center;">
+<div style="display: flex; gap: 50px; align-items: center;">
    <div style="text-align: center;">
     <img src="assets/real-background.png" width="190" alt="Real bag">
     <p><em> <a href="https://madisonavenuecouture.com/products/hermes-birkin-30-himalaya-niloticus-crocodile-palladium-hardware-6?variant=41321718743134">Madison Avenue Couture</a></em></p>
