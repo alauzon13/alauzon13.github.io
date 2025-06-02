@@ -16,6 +16,7 @@ When it came to the bag, I knew immediately which one I wanted to investigate: t
 I was particularly interested in the Hermès Himalaya Birkin, a white-and-grey crocodile version of the famous bag. The Himalaya is regarded as one of the most elusive and expensive handbags in the world, with a diamond-encrusted version being sold for over $450,000 USD in 2022 (the most expensive bag sale to date). Even without diamonds, the white and grey crocodile skin bag sells for about $200,000 new. 
 
 ![himalaya-birk](assets/himalaya-birk.webp)
+*Diamond Himalaya Birkin, Sotheby's*
 
 It’s no wonder that, given what a Himalaya communicates about one's time and income, that they are one of the most-duped bags available on the replica market. Just this past December, a replica for sale on [Walmart](https://www.cbc.ca/news/world/walmart-wirkin-bag-1.7423682) went viral and subsequently sold out, and other versions are readily available on sites like DHgate and AliExpress. 
 
