@@ -1,3 +1,4 @@
+# Dupe Detection: Can a ML model spot the fake? 
 
 In 2019, The RealReal -- an “authenticated luxury resale” marketplace -- sold a fake Dior bag to [Forbes contributor](https://www.forbes.com/sites/richardkestenbaum/2019/10/23/if-fake-bags-are-being-sold-on-the-realreal-how-can-the-resale-business-ever-succeed/) Richard Kestenbaum for $3,600 USD. The inauthenticity was determined by external experts who were trained to spot the tells: the herringbone pattern was slightly off; the handles were a hair too short; the embroidery wasn’t as detailed as it should be. 
 
@@ -41,7 +42,8 @@ After inspecting the images, I noticed that product photos of fake bags tended t
   </div>
 </div>
 
-Small datasets like this one are prone to overfitting. A model is overfit when instead of learning population-level characteristics, it simply memorizes the patterns in the provided training set. To boost the amount of data available, I implemented image augmentation -- which is when in addition to the original data, we include copies of images that have been stretched, flipped, rotated, shifted, etc. Augmentation is a common technique to improve model quality when data is limited. 
+A model trained on a small dataset like this one is prone to overfitting, which is when a model simply memorizes patterns in the training set instead of learning population-level characteristics. To boost the amount of data available, for each image, several augmentations were created. Augemented images have some random combination of stretching, flipping, rotating, and shifting applied, boosting the amount of data available for training.  
+
 
 ![aug](assets/augmentation-diag.png)
 
