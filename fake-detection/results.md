@@ -45,6 +45,9 @@ After inspecting the images, I noticed that product photos of fake bags tended t
 
 Small datasets like this one are prone to overfitting. A model is overfit when instead of learning population-level characteristics, it simply memorizes the patterns in the provided training set. To boost the amount of data available, I implemented image augmentation -- which is when in addition to the original data, we include copies of images that have been stretched, flipped, rotated, shifted, etc. Augmentation is a common technique to improve model quality when data is limited. 
 
+![aug](assets/augmentation-diag.png)
+
+
 
 ### The Model 
 
