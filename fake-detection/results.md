@@ -26,7 +26,7 @@ Before building the model, I needed to collect images online from both real and 
 
 After inspecting the images, I noticed that product photos of fake bags tended to have busier, non-empty backgrounds, whereas authenticated bags tended to be in front of plain, white backgrounds. Since I wanted to limit my analysis to the bags themselves, I opted to remove the backgrounds from all images. 
 
-<img src="assets/fake-background.png" width="150"/> <img src="assets/real-background.png" width="150"/> 
+<img src="assets/fake-background.png" width="190"/> <img src="assets/real-background.png" width="190"/> 
 
 
 ![fake-background](assets/fake-background.png "Fake") ![real-background](assets/real-background.png "Real")
