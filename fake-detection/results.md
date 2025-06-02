@@ -22,6 +22,18 @@ It’s no wonder that, given what a Himalaya communicates about one's time and i
 
 ### The data 
 
+Before building the model, I needed to collect images online from both real and fake listings of Himalaya Birkins. Because customers need to be recommended by their sales associates to purchase these bags, they aren’t readily available for purchase on the Hermès website. Instead, I turned to resellers or auction sites with authenticity guarantees. Of course, as mentioned at the beginning of this article, there is a chance that good fakes make their way past authenticators, but for the sake of data collection I assumed any bag for sale on these websites (Madison Avenue Couture, Sotheby’s, 1st Dibs, etc.) was authentic. For the replicas, I looked to websites known for selling fakes (Pochette Bag, Baginning), as well as Hermes-specific replicators (Hermes Replica). I created two folders, Real and Fake. For all bags, I saved all available product images into their respective folder. I ended up with 55 images of real handbags and 57 images of fake bags. 
+
+After inspecting the images, I noticed that product photos of fake bags tended to have busier, non-empty backgrounds, whereas authenticated bags tended to be in front of plain, white backgrounds. Since I wanted to limit my analysis to the bags themselves, I opted to remove the backgrounds from all images. 
+
+<img src="assets/fake-background.png" width="425"/> <img src="assets/real-background.png" width="425"/> 
+
+
+![fake-background](assets/fake-background.png "Fake") ![real-background](assets/real-background.png "Real")
+
+
+
+
 ### The Model 
 
 ### The results
