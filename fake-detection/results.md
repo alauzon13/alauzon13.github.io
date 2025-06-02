@@ -6,8 +6,6 @@ When contacted about the legitimacy of the bag, The RealReal said they were not 
 
 Being both a data scientist and a fashion lover, these comments stuck with me. Kestenbaum also points out that the average customer doesn’t have access to trained authenticity experts. If there is a scientific element to authenticating, if human error is a concern, and if there is an accessibility gap in authentication services, why not turn to machine learning? With the right data and models, an algorithmic approach could make luxury authentication more consistent, scalable, and accessible. 
 
-## The Big Idea 
-
 As a proof-of-concept approach, I wanted to train a binary image classification model to identify real versus fake versions of a single designer bag. I chose to limit the scope to one style because signs might be bag-specific -- like the embroidery in the fake Dior sold by The RealReal.
 
 ## The bag 
