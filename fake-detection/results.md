@@ -40,19 +40,27 @@ After inspecting the images, I noticed that product photos of fake bags tended t
   </div>
 </div>
 
-A model trained on a small dataset like this one is prone to overfitting, which is when a model simply memorizes patterns in the training set instead of learning population-level characteristics. To boost the amount of data available, for each image, several augmentations were created. Augemented images have some random combination of stretching, flipping, rotating, and shifting applied, boosting the amount of data available for training.  
+A model trained on a small dataset like this one is prone to overfitting, which is patterns in the training set are memorized rather than population-level characteristics. To boost the amount of data available and prevent overfitting, for each image, several augmentations were created. Augemented images have some random combination of stretching, flipping, rotating, and shifting applied, increasing the amount of data to train the model. 
 
 
 ![aug](assets/augmentation-diag.png)
 
 
-### The Model 
+## The Model 
 
-The bread-and-butter for image classifications is the convolutional neural network. 
+### CNN Overview
 
-What is a CNN
-Why transfer learning
-Model setup (epochs etc)
+The bread-and-butter for image classification models is the **convolutional neural network** (CNN). Inspired by the human visual cortex, CNNs are designed to mimic how our brains recognize patterns and features in images.
 
-### The results
+At a high level, a CNN applies a series of convolutions to an image. In each convlutional layer, a small grid called a filters slides across a matrix of pixels representing the input image. You can think of each filter as a magnifying glass scanning for specific patterns -- curves, edges, textures, shapes, etc.  
+
+Other elements in the CNN look for relationships between these patterns (activation functions) and select the most significant patterns (pooling layers). Finally, the model calculates the probability that the image belongs to each of the possible output labels, and chooses the label with the highest probablity as the final class prediction. 
+
+### Transfer Learning + Chosen Model 
+
+Training a CNN from scratch requires huge amounts of data, time, and computational power -- all of which were limited in this experiment. Luckily, many visual features are common across datasets, and pretrained models can be repurposed for new tasks using **transfer learning**. 
+
+For this project, I used EfficientNet, a family of CNNs pre-trained on the 14-million image ImageNet dataset. EfficientNet models are designed to be small and fast, making them a popular choice when data is limited. 
+
+## The results
 
