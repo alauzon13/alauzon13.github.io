@@ -8,6 +8,7 @@ I was surprised to learn that in remote northern communities where there may not
 Supervised by Dr. Monica Alexander, my project is specifically about predicting population in the Yukon using community generated mapping data from Open Street Map and satellite imagery. This work is ongoing, 
 
 ### Skills
+Python, geospatial data analysis, project management, research 
 
 ### Project Links 
 - Project code
