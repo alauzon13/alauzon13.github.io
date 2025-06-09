@@ -40,16 +40,13 @@ A **collaborative deep-learning** approach was used to develop the prediction al
 
 ### MLP
 
-Multilayer perceptrons (MLPs) can be thought of as the most foundational form of a neural network. In general, the neural network is designed to resemble a human brain in which groups of neurons are organized hierarchically in layers (Kerr et al., 2020). Data is input to the network (analogous to a “signal” in a brain), and certain neurons are activated that pass on the data to all connected neurons in the following layers. 
-
-In an MLP, a one-dimensional array of data (in this case, the merged plain-text data) is passed through the network. In general, a single particle’s text data is about 440 times smaller than its vignette (Kerr et al., 2020), resulting in much shorter training times. As such, the MLP was able to be trained from scratch. Due to the rapid training speed of this model, a grid search for model configurations was performed. Following the work of Kerr and colleagues, all combinations of hidden layers (1-5) and neurons per layer (256, 512, 1024, and 2048) were explored. Further, a dropout layer was included to prevent overfitting, which randomly deactivates a ratio of neurons (0.5) from the previous layer for each training step.
+Multilayer perceptrons (MLPs) can be thought of as the most foundational form of a neural network. In general, the neural network is designed to resemble a human brain in which groups of neurons are organized hierarchically in layers (Kerr et al., 2020). Data is input to the network (like “signals” in a brain), and certain neurons are activated that pass on the data to all connected neurons in the following layers. Due to the lesser complexity of MLPs, this model was trained from scratch on the plankton data.
 
 ### CNN
 
-If a neural network is conceptualized as a brain, convolutional neural networks can be thought of as adding a visual cortex to this model (Kerr et al., 2020). Unlike MLPs or more simple neural networks, CNNs involve convolutional filters that slide across an image, learning localized patterns, and creating new feature spaces or maps. These new feature maps are also images, which themselves can be processed by additional convolutional layers, allowing the network to have any number of layers which lead to increasingly abstract representations. As new data is fed through the network, weights and biases of neurons are learned and updated. At a high level, the goal of a CNN is to learn the filter values necessary for each convolutional function (layer) such that the network learns to extract important features that allow accurate class prediction. 
+If a neural network is conceptualized as a brain, convolutional neural networks can be thought of as adding a visual cortex to this model (Kerr et al., 2020). Unlike MLPs or more simple neural networks, CNNs involve convolutional filters (or grids) that slide across an image, learning localized patterns, and creating new feature spaces or maps. These new feature maps are also images, which themselves can be processed by additional convolutional layers, allowing the network to have any number of layers which lead to increasingly abstract representations. At a high level, the goal of a CNN is to learn the filter values necessary for each convolutional function (layer) such that the network learns to extract important features (edges, shapes, curves) that allow accurate class prediction. 
 
-Building a convolutional neural network from scratch requires significant computational resources and an abundance of training data. Given the limitations of this project, transfer learning was employed. Transfer learning involves initializing, re-training, and reconfiguring pre-trained models, where you begin with learned weights and biases and tune based on your particular dataset. Replicating the work of Bonin-Font et al. (2024), the EfficientNetv2 B3 model from TensorFlow was used, as the authors found that it performed well on plankton classification problems. Even with transfer learning, computational limitations did not allow for the same sort of grid search performed for the MLP. 
-
+Building a convolutional neural network from scratch requires significant computational resources and an abundance of training data. Given the limitations of this project, a pre-trained model was used and the parameters were updated based on the plankton data. The pretrained model (EfficientNetv2) was chosen based on existing plankton classification literature (Bonin-Font et al., 2024). 
 
 ### Collaborative Model
 
@@ -59,7 +56,7 @@ To construct the collaborative model, both the CNN and MLP are loaded with train
 
 ![indResults](assets/ind_results.png)
 
-Both the MLP and CNN produced high accuracy rates (>95%) at the end of the 25 training epochs. Due to computational constraints, training beyond 25 epochs was not possible. 
+Both the MLP and CNN produced high accuracy rates (>95%) at the end of the 25 training epochs, where each epoch is a stage of training. Due to computational constraints, training beyond 25 epochs was not possible. 
 
 ![collabResults](assets/collab_results.png)
 
