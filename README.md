@@ -28,7 +28,7 @@ Please note that I am eligible to work in both Canada and the US.
 
 In my second year of undergrad, I assisted with statistical analysis for research investigating opioid-related deaths in Ontario correctional facilities, supervised by Dr. Andrew Williams and Dr. Sam Caetano. My work did not substantiate authorship but I was acknowledged in the paper (see page 7). 
 
-- Lourdes Button, Andrew Williams, Christina Lamparter, Karen Woodall. ["Opioid-related deaths in Ontario correctional facilities and penitentiaries (2009–2019)."](https://link.springer.com/article/10.1007/s12024-022-00573-3). Forensic Science, Medicine, and Pathology, Volume 19, pages 357–363 (2022). 
+- Lourdes Button, Andrew Williams, Christina Lamparter, Karen Woodall. ["Opioid-related deaths in Ontario correctional facilities and penitentiaries (2009–2019)."](https://link.springer.com/article/10.1007/s12024-022-00573-3) Forensic Science, Medicine, and Pathology, Volume 19, pages 357–363 (2022). 
 
 Under the supervision of Harsh Kumar and Dr. Joseph Williams, I was able to contribute to the following papers during a summer research position sponsored by receipt of a University of Toronto Excellence Award (2022). 
 
