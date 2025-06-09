@@ -9,7 +9,7 @@ Given these challenges, nonresponse rates in the Territories are the highest in 
 
 I am developing a pipeline to produce population estimates of the Yukon Territory using community-generated mappying data from Open Street Map and Landsat Satellite imagery. This is an ongoing project that I will continue to work on until September. The status will be updated below. Preliminary materials are available to view in the links provided. 
 
-Current status (updated June 9, 2025): RF model using mapping data complete. Satellite data ready for analysis. Next steps: cleaning satellite data + running RF model, creating ensemble model.  
+**Current status (updated June 9, 2025)**: RF model using mapping data complete. Satellite data ready for analysis. Next steps: cleaning satellite data + running RF model, creating ensemble model.  
 
 
 ### Skills
