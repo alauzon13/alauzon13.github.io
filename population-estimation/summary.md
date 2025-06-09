@@ -1,16 +1,21 @@
 ## Census-Independent Population Estimation in the Yukon
 
 ### About this project 
-This is a supervised research project I am completing as part of my Master's degree (my program's version of a thesis). I became interested in the Census in my fourth year of undergrad during a computer science class titled "Computers and Society". One of our modules was about the politics of data, and specifically centered on how data collection, organization, and use are based on historical and political judgements, and how the census was one of the earliest examples of data collection as a political tool. This inspired me to look into the Canadian census more deeply, where I learned about the many unique obstacles Canada faces in administering a census due to our population patterns and geographic features. 
+This is a supervised research project I am completing as part of my Master's degree (my program's version of a thesis). I received a Canada Graduate Scholarship from the National Science and Engineering Research Council (NSERC) to complete this work, valued at $27,000CAD. I am supervised by Dr. Monica Alexander, a leader in the population estimation/demographic statistics field. 
 
-I was surprised to learn that in remote northern communities where there may not be reliable internet access, Statistics Canada goes door-to-door to manually gather data. Further, these northern communities tend to be more migratory, so information can quickly become outdated between census periods, and communities that are ice-road access only are becoming harder to reliably reach. I became interested in population estimation strategies in areas where doing a census is not feasible, and whether these tools could be applied to the Canadian context. 
+I first began to think critically about the census during a course about ethics in computing, where we learned about how the census was one of the earliest examples of data collection as a political tool. Through my independent research, I was surprised to learn that in remote northern communities where there may not be reliable internet access, Statistics Canada goes door-to-door to manually gather data. Further, because these communities are more migratory, population estimates can quickly become outdated between census periods. Some communities are also ice-road access only, and are becoming harder to reliably reach during collection times. 
 
-Supervised by Dr. Monica Alexander, my project is specifically about predicting population in the Yukon using community generated mapping data from Open Street Map and satellite imagery. This work is ongoing, 
+Given these challenges, nonresponse rates in the Territories are the highest in the country. Though statistical methods like imputation are used to calculate the estimates, there are no measures of uncerainty published in census reports. This led me to wonder if census-independent population estimation work, which is often done in areas where conducting a census isn't possible, could be applied to the Canadian context. 
+
+I am developing a pipeline to produce population estimates of the Yukon Territory using community-generated mappying data from Open Street Map and Landsat Satellite imagery. This is an ongoing project that I will continue to work on until September. The status will be updated below. Preliminary materials are available to view in the links provided. 
+
+Current status (updated June 9, 2025): RF model using mapping data complete. Satellite data ready for analysis. Next steps: cleaning satellite data + running RF model, creating ensemble model.  
+
 
 ### Skills
 Python, geospatial data analysis, project management, research 
 
 ### Project Links 
-- Project code
-- Literature review
-- Progress Update 
+- [Literature Review](Literature_Review.pdf)
+- [NSERC Research Proposal](research_proposal.pdf)
+- [Project github](https://github.com/alauzon13/population-estimation)
