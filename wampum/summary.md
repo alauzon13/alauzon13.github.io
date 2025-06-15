@@ -14,8 +14,5 @@ The original project was just a paper, but I returned to it recently to update t
 Writing, HTML, CSS
 
 ### Project link
-
-CUE 
-
 [Wampum Belts as an Alternative Data Source](https://alauzon13.github.io/wampum/sticky-side/index.html)
 
